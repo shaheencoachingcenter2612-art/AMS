@@ -1,0 +1,124 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Student Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">
+                Student Profile
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3 text-center">
+
+                    {% if student.photo %}
+                        <img src="{{ student.photo.url }}"
+                             class="img-fluid rounded border"
+                             width="200">
+                    {% else %}
+                        <img src="https://via.placeholder.com/200x220?text=No+Photo"
+                             class="img-fluid rounded border">
+                    {% endif %}
+
+                </div>
+
+                <div class="col-md-9">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th width="220">Admission No</th>
+                            <td>{{ student.admission_no }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Student Name</th>
+                            <td>{{ student.first_name }} {{ student.last_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Father Name</th>
+                            <td>{{ student.father_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Gender</th>
+                            <td>{{ student.gender }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date of Birth</th>
+                            <td>{{ student.date_of_birth }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ student.phone }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Address</th>
+                            <td>{{ student.address }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Session</th>
+                            <td>{{ student.session }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Class</th>
+                            <td>{{ student.classroom }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Section</th>
+                            <td>{{ student.section }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Admission Date</th>
+                            <td>{{ student.admission_date }}</td>
+                        </tr>
+
+                    </table>
+
+                    <a href="{% url 'student_list' %}" class="btn btn-secondary">
+                        ← Back
+                    </a>
+
+                    <a href="{% url 'edit_student' student.pk %}"
+                       class="btn btn-warning">
+                        ✏ Edit
+                    </a>
+
+                    <button class="btn btn-danger">
+                        🗑 Delete
+                    </button>
+
+                    <button class="btn btn-success">
+                        💰 Fee Record
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
