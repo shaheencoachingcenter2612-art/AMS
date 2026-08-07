@@ -4,7 +4,6 @@
 Add Student
 {% endblock %}
 
-
 {% block content %}
 
 <div class="card shadow">
@@ -15,10 +14,9 @@ Add Student
         </h3>
     </div>
 
-
     <div class="card-body">
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
 

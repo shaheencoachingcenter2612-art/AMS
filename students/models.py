@@ -1,5 +1,6 @@
 from django.db import models
 from academics.models import Session, ClassRoom, Section
+from datetime import datetime
 
 
 class Student(models.Model):
@@ -17,7 +18,11 @@ class Student(models.Model):
     )
 
     first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100, blank=True)
+
+    last_name = models.CharField(
+        max_length=100,
+        blank=True
+    )
 
     father_name = models.CharField(max_length=150)
 
@@ -53,7 +58,33 @@ class Student(models.Model):
         blank=True
     )
 
+    photo = models.ImageField(
+        upload_to="students/",
+        blank=True,
+        null=True
+    )
+
     admission_date = models.DateField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+
+        if not self.admission_no:
+
+            year = datetime.now().year
+
+            last_student = Student.objects.order_by("-id").first()
+
+            if last_student and last_student.admission_no:
+                try:
+                    last_number = int(last_student.admission_no.split("-")[-1])
+                except ValueError:
+                    last_number = 0
+            else:
+                last_number = 0
+
+            self.admission_no = f"SCC-{year}-{last_number + 1:04d}"
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.admission_no} - {self.first_name} {self.last_name}"
