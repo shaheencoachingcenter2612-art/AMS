@@ -1,0 +1,1020 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+ERP Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">
+            ERP Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            SHAHEEN COACHING CENTER — Academic Management System
+        </p>
+    </div>
+
+    <div>
+        <span class="badge bg-dark p-2">
+            Welcome, {{ request.user.username }}
+        </span>
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TODAY OVERVIEW
+===================================================== -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+            Today's Overview — {{ today }}
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <!-- PRESENT -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card border-0 bg-success bg-opacity-10 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Present
+                        </h6>
+
+                        <h2 class="fw-bold text-success">
+                            {{ today_present }}
+                        </h2>
+
+                        <a href="{% url 'attendance:attendance_list' %}"
+                           class="btn btn-sm btn-outline-success">
+                            Attendance
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ABSENT -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card border-0 bg-danger bg-opacity-10 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Absent
+                        </h6>
+
+                        <h2 class="fw-bold text-danger">
+                            {{ today_absent }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- LEAVE -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card border-0 bg-warning bg-opacity-10 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Leave
+                        </h6>
+
+                        <h2 class="fw-bold text-warning">
+                            {{ today_leave }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIARY -->
+
+            <div class="col-md-6 col-xl-3">
+
+                <div class="card border-0 bg-info bg-opacity-10 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+                            Today's Diary
+                        </h6>
+
+                        <h2 class="fw-bold text-info">
+                            {{ today_diary_count }}
+                        </h2>
+
+                        <a href="{% url 'teacher_diary:diary_list' %}"
+                           class="btn btn-sm btn-outline-info">
+                            View Diary
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ACADEMIC STATISTICS
+===================================================== -->
+
+<div class="row g-4 mb-4">
+
+    <!-- STUDENTS -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Students
+                </h6>
+
+                <h2 class="fw-bold text-primary">
+                    {{ total_students }}
+                </h2>
+
+                <a href="{% url 'students:student_list' %}"
+                   class="btn btn-sm btn-outline-primary">
+                    View Students
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TEACHERS -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Teachers
+                </h6>
+
+                <h2 class="fw-bold text-success">
+                    {{ total_teachers }}
+                </h2>
+
+                <p class="text-success mb-2">
+                    Active: {{ active_teachers }}
+                </p>
+
+                <a href="{% url 'teachers:teacher_list' %}"
+                   class="btn btn-sm btn-outline-success">
+                    View Teachers
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CLASSES -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Classes
+                </h6>
+
+                <h2 class="fw-bold text-warning">
+                    {{ total_classes }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Sections: {{ total_sections }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SESSIONS -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Academic Sessions
+                </h6>
+
+                <h2 class="fw-bold text-info">
+                    {{ total_sessions }}
+                </h2>
+
+                <p class="text-muted mb-0">
+                    Academic Structure
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FINANCE
+===================================================== -->
+
+<div class="row g-4 mb-4">
+
+    <!-- TODAY COLLECTION -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Today's Fee Collection
+                </h6>
+
+                <h3 class="fw-bold text-success">
+                    Rs. {{ today_fee_collection }}
+                </h3>
+
+                <small class="text-muted">
+                    Receipts: {{ today_fee_receipts }}
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOTAL FEE -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Fee
+                </h6>
+
+                <h3 class="fw-bold">
+                    Rs. {{ total_fee_amount }}
+                </h3>
+
+                <a href="{% url 'fee_management:fee_list' %}"
+                   class="btn btn-sm btn-outline-primary">
+                    Fee Records
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COLLECTED -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Collected
+                </h6>
+
+                <h3 class="fw-bold text-success">
+                    Rs. {{ total_fee_paid }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REMAINING -->
+
+    <div class="col-md-6 col-xl-3">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Fee Remaining
+                </h6>
+
+                <h3 class="fw-bold text-danger">
+                    Rs. {{ total_fee_remaining }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SALARY
+===================================================== -->
+
+<div class="row g-4 mb-4">
+
+    <!-- TOTAL -->
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Salary
+                </h6>
+
+                <h3 class="fw-bold">
+                    Rs. {{ total_salary }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PAID -->
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Paid Salary
+                </h6>
+
+                <h3 class="fw-bold text-success">
+                    Rs. {{ paid_salary }}
+                </h3>
+
+                <a href="{% url 'salary:salary_list' %}"
+                   class="btn btn-sm btn-outline-success">
+                    Salary Records
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PENDING -->
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Pending Salary
+                </h6>
+
+                <h3 class="fw-bold text-danger">
+                    Rs. {{ pending_salary }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT DIARY + RESULTS
+===================================================== -->
+
+<div class="row g-4 mb-4">
+
+    <!-- RECENT DIARY -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0">
+                        Today's Teacher Diary
+                    </h5>
+
+                    <a href="{% url 'teacher_diary:diary_list' %}"
+                       class="btn btn-sm btn-light">
+                        View All
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                {% if recent_diary %}
+
+                    <div class="list-group list-group-flush">
+
+                        {% for entry in recent_diary %}
+
+                            <div class="list-group-item px-0">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <strong>
+                                        {{ entry.teacher }}
+                                    </strong>
+
+                                    <small class="text-muted">
+                                        {{ entry.classroom }}
+                                    </small>
+
+                                </div>
+
+                                <div class="mt-1">
+
+                                    <span class="badge bg-primary">
+                                        {{ entry.subject }}
+                                    </span>
+
+                                    <span class="ms-1">
+                                        {{ entry.topic }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <p class="text-muted mb-0">
+                        No diary entry has been added today.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECENT RESULTS -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0">
+                        Recent Results
+                    </h5>
+
+                    <a href="{% url 'results:result_list' %}"
+                       class="btn btn-sm btn-light">
+                        View All
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body">
+
+                {% if recent_results %}
+
+                    <div class="table-responsive">
+
+                        <table class="table table-sm table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Student
+                                    </th>
+
+                                    <th>
+                                        Subject
+                                    </th>
+
+                                    <th>
+                                        Marks
+                                    </th>
+
+                                    <th>
+                                        %
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for result in recent_results %}
+
+                                    <tr>
+
+                                        <td>
+                                            {{ result.student }}
+                                        </td>
+
+                                        <td>
+                                            {{ result.subject }}
+                                        </td>
+
+                                        <td>
+                                            {{ result.obtained_marks }}/{{ result.total_marks }}
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                {{ result.percentage }}%
+                                            </strong>
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <p class="text-muted mb-0">
+                        No results available yet.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT ADMISSIONS
+===================================================== -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+                Recent Admissions
+            </h5>
+
+            <a href="{% url 'students:student_list' %}"
+               class="btn btn-sm btn-light">
+                View All
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if recent_students %}
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Admission No.
+                            </th>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Father Name
+                            </th>
+
+                            <th>
+                                Class
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for student in recent_students %}
+
+                            <tr>
+
+                                <td>
+                                    {{ student.admission_no }}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        {{ student.first_name }}
+                                        {{ student.last_name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ student.father_name }}
+                                </td>
+
+                                <td>
+                                    {{ student.classroom }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p class="text-muted mb-0">
+                No students available.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     QUICK ACTIONS
+===================================================== -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Quick Actions
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <!-- ADD STUDENT -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'students:add_student' %}"
+                   class="btn btn-primary w-100 py-2">
+
+                    + Add Student
+
+                </a>
+
+            </div>
+
+
+            <!-- ADD TEACHER -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'teachers:add_teacher' %}"
+                   class="btn btn-success w-100 py-2">
+
+                    + Add Teacher
+
+                </a>
+
+            </div>
+
+
+            <!-- ADD FEE -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'fee_management:add_fee' %}"
+                   class="btn btn-warning w-100 py-2">
+
+                    + Add Fee
+
+                </a>
+
+            </div>
+
+
+            <!-- ADD SALARY -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'salary:add_salary' %}"
+                   class="btn btn-info w-100 py-2">
+
+                    + Add Salary
+
+                </a>
+
+            </div>
+
+
+            <!-- ADD ATTENDANCE -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'attendance:add_attendance' %}"
+                   class="btn btn-outline-success w-100 py-2">
+
+                    + Attendance
+
+                </a>
+
+            </div>
+
+
+            <!-- ADD DIARY -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'teacher_diary:add_diary' %}"
+                   class="btn btn-outline-info w-100 py-2">
+
+                    + Teacher Diary
+
+                </a>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'results:result_list' %}"
+                   class="btn btn-outline-primary w-100 py-2">
+
+                    Results
+
+                </a>
+
+            </div>
+
+
+            <!-- TIMETABLE -->
+
+            <div class="col-md-6 col-lg-3">
+
+                <a href="{% url 'timetable:timetable_list' %}"
+                   class="btn btn-outline-dark w-100 py-2">
+
+                    Timetable
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     ERP MODULE STATUS
+===================================================== -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            ERP Module Status
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Student Management
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Teacher Management
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Fee Management
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Salary / Payroll
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Attendance
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Teacher Diary
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Results
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Timetable
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Academic Management
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="alert alert-success mb-0">
+                    ✅ Role-Based Access
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

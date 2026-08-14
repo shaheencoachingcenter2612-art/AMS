@@ -6,86 +6,395 @@ Dashboard
 
 {% block content %}
 
-<div class="container mt-4">
-
-    <div class="alert alert-success shadow-sm">
-        <h3>Welcome, {{ request.user.username }} 👋</h3>
-        <p class="mb-0">
-            Welcome to <strong>SHAHEEN COACHING CENTER ERP</strong>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1">Admin Dashboard</h2>
+        <p class="text-muted mb-0">
+            SHAHEEN COACHING CENTER ERP
         </p>
     </div>
 
-    <div class="row">
+    <div>
+        <span class="badge bg-success fs-6">
+            {{ request.user.username }}
+        </span>
+    </div>
+</div>
 
-        <div class="col-md-3 mb-4">
-            <div class="card border-primary shadow">
-                <div class="card-body text-center">
-                    <h5>Total Students</h5>
-                    <h2>{{ total_students }}</h2>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-3 mb-4">
-            <div class="card border-success shadow">
-                <div class="card-body text-center">
-                    <h5>Total Sessions</h5>
-                    <h2>{{ total_sessions }}</h2>
-                </div>
-            </div>
-        </div>
+<!-- ============================= -->
+<!-- MAIN STATISTICS -->
+<!-- ============================= -->
 
-        <div class="col-md-3 mb-4">
-            <div class="card border-warning shadow">
-                <div class="card-body text-center">
-                    <h5>Total Classes</h5>
-                    <h2>{{ total_classes }}</h2>
-                </div>
-            </div>
-        </div>
+<div class="row">
 
-        <div class="col-md-3 mb-4">
-            <div class="card border-info shadow">
-                <div class="card-body text-center">
-                    <h5>Total Sections</h5>
-                    <h2>{{ total_sections }}</h2>
+    <!-- STUDENTS -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-primary shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+                        <p class="text-muted mb-1">
+                            Total Students
+                        </p>
+
+                        <h2 class="mb-0">
+                            {{ total_students }}
+                        </h2>
+                    </div>
+
+                    <div class="fs-1 text-primary">
+                        👨‍🎓
+                    </div>
+
                 </div>
+
+                <a href="{% url 'students:student_list' %}"
+                   class="btn btn-sm btn-outline-primary mt-3">
+                    View Students
+                </a>
+
             </div>
+
         </div>
 
     </div>
 
-    <div class="row">
 
-        <div class="col-md-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header bg-success text-white">
-                    Fee Records
-                </div>
-                <div class="card-body text-center">
-                    <h2>{{ total_fees }}</h2>
-                    <p>Total Fee Entries</p>
-                </div>
-            </div>
-        </div>
+    <!-- TEACHERS -->
 
-        <div class="col-md-6 mb-4">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    ERP Status
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-success shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+                        <p class="text-muted mb-1">
+                            Total Teachers
+                        </p>
+
+                        <h2 class="mb-0">
+                            {{ total_teachers }}
+                        </h2>
+                    </div>
+
+                    <div class="fs-1 text-success">
+                        👨‍🏫
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    <ul class="mb-0">
-                        <li>✅ Student Module</li>
-                        <li>✅ Academic Module</li>
-                        <li>✅ Fee Module</li>
-                        <li>🚀 Dashboard Connected</li>
-                    </ul>
-                </div>
+
+                <a href="{% url 'teachers:teacher_list' %}"
+                   class="btn btn-sm btn-outline-success mt-3">
+                    View Teachers
+                </a>
+
             </div>
+
         </div>
 
     </div>
+
+
+    <!-- CLASSES -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-warning shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+                        <p class="text-muted mb-1">
+                            Total Classes
+                        </p>
+
+                        <h2 class="mb-0">
+                            {{ total_classes }}
+                        </h2>
+                    </div>
+
+                    <div class="fs-1 text-warning">
+                        🏫
+                    </div>
+
+                </div>
+
+                <span class="badge bg-warning text-dark mt-3">
+                    Academic
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SECTIONS -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card border-info shadow-sm h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+                        <p class="text-muted mb-1">
+                            Total Sections
+                        </p>
+
+                        <h2 class="mb-0">
+                            {{ total_sections }}
+                        </h2>
+                    </div>
+
+                    <div class="fs-1 text-info">
+                        📚
+                    </div>
+
+                </div>
+
+                <span class="badge bg-info mt-3">
+                    Sections
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- FEE + SESSION -->
+<!-- ============================= -->
+
+<div class="row">
+
+    <!-- FEE -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-success text-white">
+
+                <strong>
+                    Fee Management
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                <h2>
+                    {{ total_fees }}
+                </h2>
+
+                <p class="text-muted">
+                    Total Fee Records
+                </p>
+
+                <a href="{% url 'fee_management:fee_list' %}"
+                   class="btn btn-success">
+                    Manage Fees
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SESSIONS -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-primary text-white">
+
+                <strong>
+                    Academic Sessions
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                <h2>
+                    {{ total_sessions }}
+                </h2>
+
+                <p class="text-muted">
+                    Total Academic Sessions
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SYSTEM -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-header bg-dark text-white">
+
+                <strong>
+                    ERP Modules
+                </strong>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Students
+                    </span>
+                </div>
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Teachers
+                    </span>
+                </div>
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Attendance
+                    </span>
+                </div>
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Results
+                    </span>
+                </div>
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Timetable
+                    </span>
+                </div>
+
+                <div class="mb-2">
+                    <span class="badge bg-success">
+                        ✓ Fee Management
+                    </span>
+                </div>
+
+                <div>
+                    <span class="badge bg-success">
+                        ✓ Teacher Salary
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- QUICK ACTIONS -->
+<!-- ============================= -->
+
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-light">
+
+        <strong>
+            Quick Actions
+        </strong>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-3 mb-2">
+
+                <a href="{% url 'students:add_student' %}"
+                   class="btn btn-primary w-100">
+                    + Add Student
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-2">
+
+                <a href="{% url 'teachers:add_teacher' %}"
+                   class="btn btn-success w-100">
+                    + Add Teacher
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-2">
+
+                <a href="{% url 'fee_management:add_fee' %}"
+                   class="btn btn-warning w-100">
+                    + Add Fee
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-2">
+
+                <a href="{% url 'teachers:add_salary' %}"
+                   class="btn btn-dark w-100">
+                    + Add Salary
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- SYSTEM STATUS -->
+<!-- ============================= -->
+
+<div class="alert alert-success shadow-sm">
+
+    <h5 class="mb-2">
+        System Status
+    </h5>
+
+    <p class="mb-0">
+        SHAHEEN COACHING CENTER ERP is running successfully.
+        All major academic and administrative modules are connected.
+    </p>
 
 </div>
 

@@ -1,0 +1,73 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Delete Teacher
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card shadow border-danger">
+
+        <div class="card-header bg-danger text-white">
+
+            <h3 class="mb-0">
+                Delete Teacher
+            </h3>
+
+        </div>
+
+        <div class="card-body">
+
+            <h5 class="text-danger">
+                Are you sure you want to delete this teacher?
+            </h5>
+
+            <hr>
+
+            <p>
+                <strong>Employee ID:</strong>
+                {{ teacher.employee_id }}
+            </p>
+
+            <p>
+                <strong>Name:</strong>
+                {{ teacher.first_name }} {{ teacher.last_name }}
+            </p>
+
+            <p>
+                <strong>Subject:</strong>
+                {{ teacher.subject }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ teacher.phone }}
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="btn btn-danger">
+                    Yes, Delete
+                </button>
+
+                <a
+                    href="{% url 'teachers:teacher_detail' teacher.pk %}"
+                    class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

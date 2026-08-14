@@ -1,0 +1,295 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Daily Attendance Report
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Daily Attendance Report</h2>
+
+        <button
+            onclick="window.print()"
+            class="btn btn-dark no-print">
+
+            🖨 Print Report
+
+        </button>
+
+    </div>
+
+
+    <div class="card shadow mb-4 no-print">
+
+        <div class="card-header bg-dark text-white">
+            Filter Report
+        </div>
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            value="{{ date }}"
+                            class="form-control">
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Class
+                        </label>
+
+                        <select
+                            name="classroom"
+                            class="form-select">
+
+                            <option value="">
+                                All Classes
+                            </option>
+
+                            {% for classroom in classrooms %}
+
+                                <option
+                                    value="{{ classroom.id }}"
+                                    {% if classroom.id|stringformat:"s" == classroom_id %}
+                                    selected
+                                    {% endif %}>
+
+                                    {{ classroom }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select
+                            name="section"
+                            class="form-select">
+
+                            <option value="">
+                                All Sections
+                            </option>
+
+                            {% for section in sections %}
+
+                                <option
+                                    value="{{ section.id }}"
+                                    {% if section.id|stringformat:"s" == section_id %}
+                                    selected
+                                    {% endif %}>
+
+                                    {{ section }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <button
+                    class="btn btn-success">
+
+                    Apply Filter
+
+                </button>
+
+                <a
+                    href="{% url 'attendance:attendance_report' %}"
+                    class="btn btn-secondary">
+
+                    Reset
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow mb-4">
+
+        <div class="card-body">
+
+            <h3 class="text-center">
+                SHAHEEN COACHING CENTER
+            </h3>
+
+            <h5 class="text-center">
+                Daily Attendance Report
+            </h5>
+
+            {% if date %}
+
+                <p class="text-center">
+                    Date: {{ date }}
+                </p>
+
+            {% endif %}
+
+
+            <div class="row text-center mb-4">
+
+                <div class="col-md-3">
+                    <strong>Total</strong>
+                    <h4>{{ total }}</h4>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Present</strong>
+                    <h4 class="text-success">
+                        {{ present }}
+                    </h4>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Absent</strong>
+                    <h4 class="text-danger">
+                        {{ absent }}
+                    </h4>
+                </div>
+
+                <div class="col-md-3">
+                    <strong>Leave</strong>
+                    <h4 class="text-warning">
+                        {{ leave }}
+                    </h4>
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Admission No.</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for attendance in attendances %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ attendance.date }}
+                            </td>
+
+                            <td>
+                                {{ attendance.student.admission_no }}
+                            </td>
+
+                            <td>
+                                {{ attendance.student.first_name }}
+                                {{ attendance.student.last_name }}
+                            </td>
+
+                            <td>
+                                {{ attendance.classroom }}
+                            </td>
+
+                            <td>
+                                {{ attendance.section }}
+                            </td>
+
+                            <td>
+                                {{ attendance.status }}
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                No attendance records found.
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12px;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

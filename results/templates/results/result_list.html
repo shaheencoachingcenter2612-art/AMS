@@ -1,0 +1,389 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Results
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1">
+            Results
+        </h2>
+
+        <p class="text-muted mb-0">
+            Manage student examination results
+        </p>
+
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'results:result_dashboard' %}"
+            class="btn btn-secondary">
+
+            Dashboard
+
+        </a>
+
+        <a
+            href="{% url 'results:add_result' %}"
+            class="btn btn-success">
+
+            + Add Result
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Search -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row g-3">
+
+                <div class="col-md-7">
+
+                    <label class="form-label">
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ query }}"
+                        class="form-control"
+                        placeholder="Student name, admission number or subject">
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Exam Type
+                    </label>
+
+                    <select
+                        name="exam_type"
+                        class="form-select">
+
+                        <option value="">
+                            All Exam Types
+                        </option>
+
+                        <option
+                            value="Monthly Test"
+                            {% if exam_type == "Monthly Test" %}selected{% endif %}>
+
+                            Monthly Test
+
+                        </option>
+
+                        <option
+                            value="Mid Term"
+                            {% if exam_type == "Mid Term" %}selected{% endif %}>
+
+                            Mid Term
+
+                        </option>
+
+                        <option
+                            value="Final Term"
+                            {% if exam_type == "Final Term" %}selected{% endif %}>
+
+                            Final Term
+
+                        </option>
+
+                        <option
+                            value="Annual"
+                            {% if exam_type == "Annual" %}selected{% endif %}>
+
+                            Annual
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-1 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- Results Table -->
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Student</th>
+                        <th>Admission No.</th>
+                        <th>Subject</th>
+                        <th>Exam Type</th>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Obtained</th>
+                        <th>Percentage</th>
+                        <th>Grade</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for result in results %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                {{ result.student.first_name }}
+                                {{ result.student.last_name }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ result.student.admission_no }}
+                        </td>
+
+
+                        <td>
+                            {{ result.subject.name }}
+                        </td>
+
+
+                        <td>
+                            {{ result.exam_type }}
+                        </td>
+
+
+                        <td>
+                            {{ result.exam_date }}
+                        </td>
+
+
+                        <td>
+                            {{ result.total_marks }}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                {{ result.obtained_marks }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- Percentage -->
+
+                        <td>
+
+                            <strong>
+                                {{ result.percentage }}%
+                            </strong>
+
+                        </td>
+
+
+                        <!-- Grade -->
+
+                        <td>
+
+                            {% if result.grade == "A+" %}
+
+                                <span class="badge bg-success">
+                                    A+
+                                </span>
+
+                            {% elif result.grade == "A" %}
+
+                                <span class="badge bg-success">
+                                    A
+                                </span>
+
+                            {% elif result.grade == "B" %}
+
+                                <span class="badge bg-primary">
+                                    B
+                                </span>
+
+                            {% elif result.grade == "C" %}
+
+                                <span class="badge bg-info text-dark">
+                                    C
+                                </span>
+
+                            {% elif result.grade == "D" %}
+
+                                <span class="badge bg-warning text-dark">
+                                    D
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    F
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Status -->
+
+                        <td>
+
+                            {% if result.percentage >= 40 %}
+
+                                <span class="badge bg-success">
+                                    PASS
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger">
+                                    FAIL
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Actions -->
+
+                        <td>
+
+                            <div class="d-flex gap-1">
+
+                                <a
+                                    href="{% url 'results:result_detail' result.pk %}"
+                                    class="btn btn-sm btn-info text-white">
+
+                                    View
+
+                                </a>
+
+
+                                <a
+                                    href="{% url 'results:edit_result' result.pk %}"
+                                    class="btn btn-sm btn-warning">
+
+                                    Edit
+
+                                </a>
+
+
+                                <a
+                                    href="{% url 'results:delete_result' result.pk %}"
+                                    class="btn btn-sm btn-danger">
+
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="12"
+                            class="text-center py-5">
+
+                            <h5 class="text-muted">
+                                No results found
+                            </h5>
+
+                            <p class="text-muted mb-3">
+                                No examination results have been added yet.
+                            </p>
+
+                            <a
+                                href="{% url 'results:add_result' %}"
+                                class="btn btn-success">
+
+                                + Add First Result
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

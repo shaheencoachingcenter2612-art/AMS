@@ -1,0 +1,322 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {% if edit_mode %}
+        Edit Result
+    {% else %}
+        Add Result
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h1 class="fw-bold mb-1">
+
+            {% if edit_mode %}
+                Edit Result
+            {% else %}
+                Add Result
+            {% endif %}
+
+        </h1>
+
+        <p class="text-muted mb-0">
+            Enter student examination result
+        </p>
+
+    </div>
+
+    <a
+        href="{% url 'results:result_list' %}"
+        class="btn btn-secondary"
+    >
+        Back to Results
+    </a>
+
+</div>
+
+
+<!-- Form Card -->
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body p-4">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- Non Field Errors -->
+
+            {% if form.non_field_errors %}
+
+                <div class="alert alert-danger">
+
+                    {{ form.non_field_errors }}
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="row g-4">
+
+
+                <!-- Student -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Student *
+                    </label>
+
+                    {{ form.student }}
+
+                    {% for error in form.student.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Session -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Session *
+                    </label>
+
+                    {{ form.session }}
+
+                    {% for error in form.session.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Class -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Class *
+                    </label>
+
+                    {{ form.classroom }}
+
+                    {% for error in form.classroom.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Section -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Section *
+                    </label>
+
+                    {{ form.section }}
+
+                    {% for error in form.section.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Subject -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Subject *
+                    </label>
+
+                    {{ form.subject }}
+
+                    {% for error in form.subject.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Exam Type -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Exam Type *
+                    </label>
+
+                    {{ form.exam_type }}
+
+                    {% for error in form.exam_type.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Exam Date -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        Exam Date *
+                    </label>
+
+                    {{ form.exam_date }}
+
+                    {% for error in form.exam_date.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Total Marks -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Total Marks *
+                    </label>
+
+                    {{ form.total_marks }}
+
+                    {% for error in form.total_marks.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Obtained Marks -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label fw-semibold">
+                        Obtained Marks *
+                    </label>
+
+                    {{ form.obtained_marks }}
+
+                    {% for error in form.obtained_marks.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Remarks -->
+
+                <div class="col-12">
+
+                    <label class="form-label fw-semibold">
+                        Remarks
+                    </label>
+
+                    {{ form.remarks }}
+
+                    {% for error in form.remarks.errors %}
+
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <!-- Buttons -->
+
+            <div class="d-flex gap-2">
+
+                <button
+                    type="submit"
+                    class="btn btn-success px-4"
+                >
+
+                    {% if edit_mode %}
+                        Update Result
+                    {% else %}
+                        Save Result
+                    {% endif %}
+
+                </button>
+
+
+                <a
+                    href="{% url 'results:result_list' %}"
+                    class="btn btn-outline-secondary px-4"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

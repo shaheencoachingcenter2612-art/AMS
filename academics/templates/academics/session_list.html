@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Sessions</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            color: white;
+            background: #007bff;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-edit {
+            background: #198754;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #212529;
+            color: white;
+        }
+
+        .active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: red;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .delete-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+
+        button {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 5px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>Academic Sessions</h1>
+
+        <a
+            href="{% url 'academics:add_session' %}"
+            class="btn"
+        >
+            + Add Session
+        </a>
+
+    </div>
+
+
+    {% if delete_confirm %}
+
+        <div class="delete-box">
+
+            <p>
+                Are you sure you want to delete
+                <strong>{{ delete_confirm.name }}</strong>?
+            </p>
+
+            <form
+                method="post"
+                action="{% url 'academics:delete_session' delete_confirm.pk %}"
+            >
+
+                {% csrf_token %}
+
+                <button type="submit">
+                    Yes, Delete
+                </button>
+
+                <a
+                    href="{% url 'academics:session_list' %}"
+                    class="btn"
+                >
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    {% endif %}
+
+
+    {% if sessions %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Session</th>
+                    <th>Start Year</th>
+                    <th>End Year</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for session in sessions %}
+
+                    <tr>
+
+                        <td>
+                            {{ session.id }}
+                        </td>
+
+                        <td>
+                            {{ session.name }}
+                        </td>
+
+                        <td>
+                            {{ session.start_year }}
+                        </td>
+
+                        <td>
+                            {{ session.end_year }}
+                        </td>
+
+                        <td>
+
+                            {% if session.is_active %}
+
+                                <span class="active">
+                                    Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="inactive">
+                                    Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <a
+                                    href="{% url 'academics:edit_session' session.pk %}"
+                                    class="btn btn-edit"
+                                >
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="{% url 'academics:delete_session' session.pk %}"
+                                    class="btn btn-danger"
+                                >
+                                    Delete
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <p>No academic sessions found.</p>
+
+    {% endif %}
+
+
+    <br>
+
+    <a href="{% url 'academics:dashboard' %}">
+        ← Back to Academics Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

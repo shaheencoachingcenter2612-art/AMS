@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Teacher Report
+    </title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            margin: 3px;
+            color: #555;
+        }
+
+        .summary {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 7px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .active {
+            color: green;
+            font-weight: bold;
+        }
+
+        .inactive {
+            color: red;
+            font-weight: bold;
+        }
+
+        .print-button {
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        @media print {
+
+            .print-button {
+                display: none;
+            }
+
+            body {
+                margin: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<button
+    class="print-button"
+    onclick="window.print()"
+>
+    🖨 Print
+</button>
+
+
+<div class="header">
+
+    <h1>
+        Teacher Report
+    </h1>
+
+    <p>
+        Teacher Records
+    </p>
+
+    {% if query %}
+        <p>
+            Search: {{ query }}
+        </p>
+    {% endif %}
+
+    {% if gender %}
+        <p>
+            Gender: {{ gender }}
+        </p>
+    {% endif %}
+
+    {% if status %}
+        <p>
+            Status: {{ status }}
+        </p>
+    {% endif %}
+
+    {% if subject %}
+        <p>
+            Subject: {{ subject }}
+        </p>
+    {% endif %}
+
+</div>
+
+
+<div class="summary">
+
+    <strong>
+        Total Teachers:
+    </strong>
+
+    {{ teachers|length }}
+
+</div>
+
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>#</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Subject</th>
+            <th>Phone</th>
+            <th>CNIC</th>
+            <th>Salary</th>
+            <th>Status</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for teacher in teachers %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+            <td>
+                {{ teacher.employee_id }}
+            </td>
+
+            <td>
+                {{ teacher.first_name }}
+                {{ teacher.last_name }}
+            </td>
+
+            <td>
+                {{ teacher.gender }}
+            </td>
+
+            <td>
+                {{ teacher.subject }}
+            </td>
+
+            <td>
+                {{ teacher.phone }}
+            </td>
+
+            <td>
+                {{ teacher.cnic }}
+            </td>
+
+            <td>
+                Rs. {{ teacher.salary }}
+            </td>
+
+            <td>
+
+                {% if teacher.status == "Active" %}
+
+                    <span class="active">
+                        Active
+                    </span>
+
+                {% else %}
+
+                    <span class="inactive">
+                        Inactive
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td
+                colspan="9"
+                style="text-align:center;"
+            >
+                No teacher records found.
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+</body>
+
+</html>

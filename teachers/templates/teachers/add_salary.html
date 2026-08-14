@@ -1,0 +1,373 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+
+{% if edit_mode %}
+Edit Salary
+{% else %}
+Add Teacher Salary
+{% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2>
+        {% if edit_mode %}
+            Edit Teacher Salary
+        {% else %}
+            Add Teacher Salary
+        {% endif %}
+    </h2>
+
+    <a
+        href="{% url 'teachers:salary_list' %}"
+        class="btn btn-secondary">
+
+        ← Back to Salaries
+
+    </a>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Salary Information
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <!-- FORM ERRORS -->
+
+        {% if form.errors %}
+
+            <div class="alert alert-danger">
+
+                <strong>
+                    Please correct the following errors:
+                </strong>
+
+                <ul class="mb-0">
+
+                    {% for field in form %}
+
+                        {% for error in field.errors %}
+
+                            <li>
+                                {{ field.label }}: {{ error }}
+                            </li>
+
+                        {% endfor %}
+
+                    {% endfor %}
+
+
+                    {% for error in form.non_field_errors %}
+
+                        <li>
+                            {{ error }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        {% endif %}
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="row">
+
+
+                <!-- TEACHER -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Teacher
+                    </label>
+
+                    {{ form.teacher }}
+
+                    {% if form.teacher.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.teacher.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- MONTH -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Salary Month
+                    </label>
+
+                    {{ form.month }}
+
+                    {% if form.month.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.month.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- YEAR -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Salary Year
+                    </label>
+
+                    {{ form.year }}
+
+                    {% if form.year.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.year.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- BASIC SALARY -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Basic Salary
+                    </label>
+
+                    {{ form.basic_salary }}
+
+                    {% if form.basic_salary.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.basic_salary.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ALLOWANCE -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Allowance
+                    </label>
+
+                    {{ form.allowance }}
+
+                    {% if form.allowance.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.allowance.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ADVANCE -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Advance
+                    </label>
+
+                    {{ form.advance }}
+
+                    {% if form.advance.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.advance.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- DEDUCTION -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Deduction
+                    </label>
+
+                    {{ form.deduction }}
+
+                    {% if form.deduction.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.deduction.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PAYMENT STATUS -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Payment Status
+                    </label>
+
+                    {{ form.paid }}
+
+                    {% if form.paid.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.paid.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PAYMENT METHOD -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Payment Method
+                    </label>
+
+                    {{ form.payment_method }}
+
+                    {% if form.payment_method.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.payment_method.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- PAYMENT DATE -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Payment Date
+                    </label>
+
+                    {{ form.payment_date }}
+
+                    {% if form.payment_date.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.payment_date.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- REMARKS -->
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label">
+                        Remarks
+                    </label>
+
+                    {{ form.remarks }}
+
+                    {% if form.remarks.errors %}
+
+                        <div class="text-danger small">
+                            {{ form.remarks.errors }}
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- BUTTONS -->
+
+            <div class="d-flex justify-content-end gap-2">
+
+                <a
+                    href="{% url 'teachers:salary_list' %}"
+                    class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    {% if edit_mode %}
+
+                        Update Salary
+
+                    {% else %}
+
+                        Save Salary
+
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fee Receipt - {{ fee.receipt_no }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            color: #222;
+        }
+
+        .receipt {
+            width: 800px;
+            max-width: 100%;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .academy-name {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .title {
+            margin-top: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .receipt-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .student-info {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .student-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .student-info td {
+            padding: 7px;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 25%;
+        }
+
+        .fee-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .fee-table th,
+        .fee-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .fee-table th {
+            background: #f3f3f3;
+            text-align: left;
+        }
+
+        .amount {
+            text-align: right;
+        }
+
+        .summary {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .summary td {
+            padding: 9px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary .label {
+            text-align: right;
+        }
+
+        .total-row {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
+
+        .remarks {
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        .footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .signature {
+            width: 200px;
+            text-align: center;
+            border-top: 1px solid #222;
+            padding-top: 7px;
+        }
+
+        .print-button {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #222;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .receipt {
+                width: 100%;
+                border: none;
+                padding: 20px;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<button class="print-button" onclick="window.print()">
+    Print Receipt
+</button>
+
+<div class="receipt">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="academy-name">
+            SHAHEEN COACHING CENTER
+        </div>
+
+        <div class="tagline">
+            Where Education Meets Inspiration
+        </div>
+
+        <div class="title">
+            FEE RECEIPT
+        </div>
+
+    </div>
+
+
+    <!-- RECEIPT INFORMATION -->
+
+    <div class="receipt-info">
+
+        <div>
+            <strong>Receipt No:</strong>
+            {{ fee.receipt_no }}
+        </div>
+
+        <div>
+            <strong>Date:</strong>
+
+            {% if fee.payment_date %}
+                {{ fee.payment_date|date:"d M Y" }}
+            {% else %}
+                {{ fee.created_at|date:"d M Y" }}
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- STUDENT INFORMATION -->
+
+    <div class="student-info">
+
+        <table>
+
+            <tr>
+
+                <td class="label">
+                    Student Name
+                </td>
+
+                <td>
+                    {{ fee.student.first_name }}
+                    {{ fee.student.last_name }}
+                </td>
+
+                <td class="label">
+                    Admission No.
+                </td>
+
+                <td>
+                    {{ fee.student.admission_no }}
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td class="label">
+                    Father Name
+                </td>
+
+                <td>
+                    {{ fee.student.father_name }}
+                </td>
+
+                <td class="label">
+                    Class
+                </td>
+
+                <td>
+                    {{ fee.student.classroom }}
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td class="label">
+                    Section
+                </td>
+
+                <td>
+                    {{ fee.student.section }}
+                </td>
+
+                <td class="label">
+                    Month
+                </td>
+
+                <td>
+                    {{ fee.month }} {{ fee.year }}
+                </td>
+
+            </tr>
+
+        </table>
+
+    </div>
+
+
+    <!-- FEE DETAILS -->
+
+    <table class="fee-table">
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Description
+                </th>
+
+                <th class="amount">
+                    Amount (Rs.)
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>
+                    Monthly Fee
+                </td>
+
+                <td class="amount">
+                    {{ fee.monthly_fee }}
+                </td>
+
+            </tr>
+
+            {% if fee.admission_fee %}
+
+            <tr>
+
+                <td>
+                    Admission Fee
+                </td>
+
+                <td class="amount">
+                    {{ fee.admission_fee }}
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+
+            {% if fee.exam_fee %}
+
+            <tr>
+
+                <td>
+                    Examination Fee
+                </td>
+
+                <td class="amount">
+                    {{ fee.exam_fee }}
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+
+            {% if fee.fine %}
+
+            <tr>
+
+                <td>
+                    Fine
+                </td>
+
+                <td class="amount">
+                    {{ fee.fine }}
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+
+            {% if fee.discount %}
+
+            <tr>
+
+                <td>
+                    Discount
+                </td>
+
+                <td class="amount">
+                    - {{ fee.discount }}
+                </td>
+
+            </tr>
+
+            {% endif %}
+
+        </tbody>
+
+    </table>
+
+
+    <!-- PAYMENT SUMMARY -->
+
+    <table class="summary">
+
+        <tr>
+
+            <td class="label">
+                Total Amount:
+            </td>
+
+            <td class="amount">
+                <strong>
+                    Rs. {{ fee.total_amount }}
+                </strong>
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td class="label">
+                Amount Paid:
+            </td>
+
+            <td class="amount">
+                Rs. {{ fee.amount_paid }}
+            </td>
+
+        </tr>
+
+
+        <tr class="total-row">
+
+            <td class="label">
+                Remaining Amount:
+            </td>
+
+            <td class="amount">
+                Rs. {{ fee.remaining_amount }}
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- PAYMENT STATUS -->
+
+    <div class="status">
+
+        {% if fee.paid %}
+
+            STATUS: PAID
+
+        {% else %}
+
+            STATUS: UNPAID
+
+        {% endif %}
+
+        <br>
+
+        Payment Method:
+        {{ fee.payment_method }}
+
+    </div>
+
+
+    <!-- REMARKS -->
+
+    {% if fee.remarks %}
+
+    <div class="remarks">
+
+        <strong>Remarks:</strong>
+
+        {{ fee.remarks }}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <div class="signature">
+            Accountant Signature
+        </div>
+
+        <div class="signature">
+            Authorized Signature
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

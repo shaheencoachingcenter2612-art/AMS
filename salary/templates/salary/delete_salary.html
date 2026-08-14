@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Salary</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        button, a {
+            padding: 10px 16px;
+            border-radius: 5px;
+            border: none;
+            text-decoration: none;
+            margin: 5px;
+        }
+
+        button {
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+        }
+
+        a {
+            background: #777;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Delete Salary</h1>
+
+    <p>
+        Are you sure you want to delete the salary record for:
+    </p>
+
+    <h3>
+        {{ salary.teacher }}
+    </h3>
+
+    <p>
+        {{ salary.month }} {{ salary.year }}
+    </p>
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        <button type="submit">
+            Yes, Delete
+        </button>
+
+        <a href="{% url 'salary:salary_detail' salary.pk %}">
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>

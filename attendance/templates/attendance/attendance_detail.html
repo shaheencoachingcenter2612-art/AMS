@@ -1,0 +1,150 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Attendance Details
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Attendance Details</h2>
+
+        <div>
+
+            <a
+                href="{% url 'attendance:edit_attendance' attendance.pk %}"
+                class="btn btn-warning">
+
+                Edit
+
+            </a>
+
+            <a
+                href="{% url 'attendance:delete_attendance' attendance.pk %}"
+                class="btn btn-danger">
+
+                Delete
+
+            </a>
+
+            <a
+                href="{% url 'attendance:attendance_list' %}"
+                class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4 class="mb-0">
+                Student Attendance Record
+            </h4>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th width="30%">Student</th>
+                    <td>
+                        {{ attendance.student.first_name }}
+                        {{ attendance.student.last_name }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Admission No.</th>
+                    <td>
+                        {{ attendance.student.admission_no }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Session</th>
+                    <td>
+                        {{ attendance.session }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Class</th>
+                    <td>
+                        {{ attendance.classroom }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Section</th>
+                    <td>
+                        {{ attendance.section }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <td>
+                        {{ attendance.date }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>
+
+                        {% if attendance.status == "Present" %}
+
+                            <span class="badge bg-success fs-6">
+                                Present
+                            </span>
+
+                        {% elif attendance.status == "Absent" %}
+
+                            <span class="badge bg-danger fs-6">
+                                Absent
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge bg-warning text-dark fs-6">
+                                Leave
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Remarks</th>
+                    <td>
+                        {% if attendance.remarks %}
+                            {{ attendance.remarks }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

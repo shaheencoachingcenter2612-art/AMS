@@ -1,0 +1,118 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Fee Structure
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2>Fee Structure</h2>
+
+    <a href="{% url 'fee_management:add_fee_structure' %}"
+       class="btn btn-success">
+
+        + Add Fee Structure
+
+    </a>
+
+</div>
+
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Class</th>
+                        <th>Monthly Fee</th>
+                        <th>Admission Fee</th>
+                        <th>Registration Fee</th>
+                        <th>Exam Fee</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for structure in structures %}
+
+                    <tr>
+
+                        <td>
+                            {{ structure.classroom }}
+                        </td>
+
+                        <td>
+                            Rs. {{ structure.monthly_fee }}
+                        </td>
+
+                        <td>
+                            Rs. {{ structure.admission_fee }}
+                        </td>
+
+                        <td>
+                            Rs. {{ structure.registration_fee }}
+                        </td>
+
+                        <td>
+                            Rs. {{ structure.exam_fee }}
+                        </td>
+
+                        <td>
+
+                            <a href="{% url 'fee_management:edit_fee_structure' structure.pk %}"
+                               class="btn btn-sm btn-warning">
+
+                                Edit
+
+                            </a>
+
+                            <a href="{% url 'fee_management:delete_fee_structure' structure.pk %}"
+                               class="btn btn-sm btn-danger">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="6"
+                            class="text-center">
+
+                            No Fee Structure Found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

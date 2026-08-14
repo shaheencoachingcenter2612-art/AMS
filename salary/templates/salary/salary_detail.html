@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Detail</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-right: 5px;
+        }
+
+        .delete {
+            background: #dc3545;
+        }
+
+        .print {
+            background: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Salary Detail</h1>
+
+    <table>
+
+        <tr>
+            <td>Teacher</td>
+            <td>{{ salary.teacher }}</td>
+        </tr>
+
+        <tr>
+            <td>Month</td>
+            <td>{{ salary.month }}</td>
+        </tr>
+
+        <tr>
+            <td>Year</td>
+            <td>{{ salary.year }}</td>
+        </tr>
+
+        <tr>
+            <td>Basic Salary</td>
+            <td>Rs. {{ salary.basic_salary }}</td>
+        </tr>
+
+        <tr>
+            <td>Allowance</td>
+            <td>Rs. {{ salary.allowance }}</td>
+        </tr>
+
+        <tr>
+            <td>Advance</td>
+            <td>Rs. {{ salary.advance }}</td>
+        </tr>
+
+        <tr>
+            <td>Deduction</td>
+            <td>Rs. {{ salary.deduction }}</td>
+        </tr>
+
+        <tr>
+            <td>Net Salary</td>
+            <td><strong>Rs. {{ salary.net_salary }}</strong></td>
+        </tr>
+
+        <tr>
+            <td>Status</td>
+            <td>
+                {% if salary.paid %}
+                    Paid
+                {% else %}
+                    Unpaid
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Payment Date</td>
+            <td>
+                {{ salary.payment_date|default:"Not paid yet" }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Remarks</td>
+            <td>
+                {{ salary.remarks|default:"—" }}
+            </td>
+        </tr>
+
+    </table>
+
+    <a
+        href="{% url 'salary:edit_salary' salary.pk %}"
+        class="btn"
+    >
+        Edit
+    </a>
+
+    <a
+        href="{% url 'salary:print_salary_slip' salary.pk %}"
+        class="btn print"
+    >
+        Print Slip
+    </a>
+
+    <a
+        href="{% url 'salary:delete_salary' salary.pk %}"
+        class="btn delete"
+    >
+        Delete
+    </a>
+
+    <a
+        href="{% url 'salary:salary_list' %}"
+        class="btn"
+    >
+        Back
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Fee Report
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                SHAHEEN COACHING CENTER
+            </h2>
+
+            <p class="text-muted mb-0">
+                Fee Collection Report
+            </p>
+        </div>
+
+        <div>
+            <button
+                onclick="window.print()"
+                class="btn btn-dark">
+                🖨 Print Report
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- REPORT TABLE -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+                            <th>Receipt No</th>
+                            <th>Admission No</th>
+                            <th>Student Name</th>
+                            <th>Month</th>
+                            <th>Year</th>
+                            <th>Total Amount</th>
+                            <th>Amount Paid</th>
+                            <th>Remaining</th>
+                            <th>Payment Method</th>
+                            <th>Status</th>
+                            <th>Payment Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for fee in fees %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ fee.receipt_no }}
+                            </td>
+
+                            <td>
+                                {{ fee.student.admission_no }}
+                            </td>
+
+                            <td>
+                                {{ fee.student.first_name }}
+                                {{ fee.student.last_name }}
+                            </td>
+
+                            <td>
+                                {{ fee.month }}
+                            </td>
+
+                            <td>
+                                {{ fee.year }}
+                            </td>
+
+                            <td>
+                                Rs. {{ fee.total_amount }}
+                            </td>
+
+                            <td class="text-success fw-bold">
+                                Rs. {{ fee.amount_paid }}
+                            </td>
+
+                            <td class="text-danger fw-bold">
+                                Rs. {{ fee.remaining_amount }}
+                            </td>
+
+                            <td>
+                                {{ fee.payment_method }}
+                            </td>
+
+                            <td>
+
+                                {% if fee.paid %}
+
+                                    <span class="badge bg-success">
+                                        Paid
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger">
+                                        Unpaid
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ fee.payment_date }}
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="12"
+                                class="text-center py-4">
+
+                                No fee records found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PRINT CSS -->
+
+<style>
+
+@media print {
+
+    @page {
+        size: landscape;
+        margin: 10mm;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .navbar,
+    footer,
+    .btn {
+        display: none !important;
+    }
+
+    .container,
+    .container-fluid {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    table {
+        font-size: 11px;
+    }
+
+    th,
+    td {
+        padding: 5px !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

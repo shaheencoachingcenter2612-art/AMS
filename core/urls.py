@@ -1,19 +1,129 @@
 from django.contrib import admin
 from django.urls import path, include
+
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    path('', include('website.urls')),
+    # =====================================================
+    # ADMIN
+    # =====================================================
 
-    path('students/', include('students.urls')),
+    path(
+        "admin/",
+        admin.site.urls,
+    ),
+
+    # =====================================================
+    # ACCOUNTS
+    # =====================================================
+
+    path(
+        "accounts/",
+        include("accounts.urls"),
+    ),
+
+    # =====================================================
+    # WEBSITE
+    # =====================================================
+
+    path(
+        "",
+        include("website.urls"),
+    ),
+
+    # =====================================================
+    # STUDENTS
+    # =====================================================
+
+    path(
+        "students/",
+        include("students.urls"),
+    ),
+
+    # =====================================================
+    # TEACHERS
+    # =====================================================
+
+    path(
+        "teachers/",
+        include("teachers.urls"),
+    ),
+
+    # =====================================================
+    # FEES
+    # =====================================================
+
+    path(
+        "fees/",
+        include("fee_management.urls"),
+    ),
+
+    # =====================================================
+    # TEACHER DIARY
+    # =====================================================
+
+    path(
+        "diary/",
+        include("teacher_diary.urls"),
+    ),
+
+    # =====================================================
+    # ATTENDANCE
+    # =====================================================
+
+    path(
+        "attendance/",
+        include("attendance.urls"),
+    ),
+
+    # =====================================================
+    # RESULTS
+    # =====================================================
+
+    path(
+        "results/",
+        include("results.urls"),
+    ),
+
+    # =====================================================
+    # TIMETABLE
+    # =====================================================
+
+    path(
+        "timetable/",
+        include("timetable.urls"),
+    ),
+
+    # =====================================================
+    # SALARY
+    # =====================================================
+
+    path(
+        "salary/",
+        include("salary.urls"),
+    ),
+
+    # =====================================================
+    # ACADEMICS
+    # =====================================================
+
+    path(
+        "academics/",
+        include("academics.urls"),
+    ),
 ]
 
+
+# =========================================================
+# MEDIA FILES
+# =========================================================
+
 if settings.DEBUG:
+
     urlpatterns += static(
         settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
+        document_root=settings.MEDIA_ROOT,
     )

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Academics Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0 15px;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .active-session {
+            margin-top: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .menu {
+            margin-top: 30px;
+        }
+
+        .menu a {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-right: 8px;
+            background: #212529;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Academics Dashboard</h1>
+
+    <div class="cards">
+
+        <div class="card">
+            <h2>Sessions</h2>
+
+            <p>{{ total_sessions }}</p>
+
+            <a href="{% url 'academics:session_list' %}">
+                Manage Sessions
+            </a>
+        </div>
+
+
+        <div class="card">
+            <h2>Classes</h2>
+
+            <p>{{ total_classes }}</p>
+
+            <a href="{% url 'academics:classroom_list' %}">
+                Manage Classes
+            </a>
+        </div>
+
+
+        <div class="card">
+            <h2>Sections</h2>
+
+            <p>{{ total_sections }}</p>
+
+            <a href="{% url 'academics:section_list' %}">
+                Manage Sections
+            </a>
+        </div>
+
+
+        <div class="card">
+            <h2>Subjects</h2>
+
+            <p>{{ total_subjects }}</p>
+
+            <a href="{% url 'academics:subject_list' %}">
+                Manage Subjects
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="active-session">
+
+        <h2>Active Session</h2>
+
+        {% if active_session %}
+
+            <p>
+                <strong>{{ active_session.name }}</strong>
+            </p>
+
+            <p>
+                {{ active_session.start_year }}
+                -
+                {{ active_session.end_year }}
+            </p>
+
+        {% else %}
+
+            <p>No active session found.</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="menu">
+
+        <a href="{% url 'academics:session_list' %}">
+            Sessions
+        </a>
+
+        <a href="{% url 'academics:classroom_list' %}">
+            Classes
+        </a>
+
+        <a href="{% url 'academics:section_list' %}">
+            Sections
+        </a>
+
+        <a href="{% url 'academics:subject_list' %}">
+            Subjects
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

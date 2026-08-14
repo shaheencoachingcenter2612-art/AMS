@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+{% if edit_mode %}Edit Fee{% else %}Fee Collection{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-success text-white">
+
+        <h3 class="mb-0">
+            {% if edit_mode %}
+                Edit Fee Record
+            {% else %}
+                Fee Collection
+            {% endif %}
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the following errors:</strong>
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Student</label>
+                    {{ form.student }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Month</label>
+                    {{ form.month }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Year</label>
+                    {{ form.year }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Monthly Fee</label>
+                    {{ form.monthly_fee }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Admission Fee</label>
+                    {{ form.admission_fee }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Exam Fee</label>
+                    {{ form.exam_fee }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Discount</label>
+                    {{ form.discount }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Fine</label>
+                    {{ form.fine }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Total Amount</label>
+                    {{ form.total_amount }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Amount Paid</label>
+                    {{ form.amount_paid }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Payment Method</label>
+                    {{ form.payment_method }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Payment Date</label>
+                    {{ form.payment_date }}
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Remarks</label>
+                    {{ form.remarks }}
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn btn-success">
+
+                {% if edit_mode %}
+                    Update Fee
+                {% else %}
+                    Save Fee
+                {% endif %}
+
+            </button>
+
+            <a
+                href="{% url 'fee_management:fee_list' %}"
+                class="btn btn-secondary">
+
+                Back
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

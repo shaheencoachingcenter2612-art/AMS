@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>{{ page_title }}</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox label {
+            margin: 0;
+        }
+
+        .errorlist {
+            color: red;
+            padding-left: 20px;
+        }
+
+        button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .back {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="form-box">
+
+        <h1>{{ page_title }}</h1>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <div class="field">
+
+                {{ form.name.label }}
+
+                {{ form.name }}
+
+                {{ form.name.errors }}
+
+            </div>
+
+
+            <div class="field">
+
+                {{ form.start_year.label }}
+
+                {{ form.start_year }}
+
+                {{ form.start_year.errors }}
+
+            </div>
+
+
+            <div class="field">
+
+                {{ form.end_year.label }}
+
+                {{ form.end_year }}
+
+                {{ form.end_year.errors }}
+
+            </div>
+
+
+            <div class="field checkbox">
+
+                {{ form.is_active }}
+
+                {{ form.is_active.label }}
+
+            </div>
+
+
+            <button type="submit">
+                Save Session
+            </button>
+
+
+            <a
+                href="{% url 'academics:session_list' %}"
+                class="back"
+            >
+                Cancel
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Delete Salary
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-danger text-white">
+
+                <h5 class="mb-0">
+                    Delete Salary Record
+                </h5>
+
+            </div>
+
+
+            <div class="card-body text-center">
+
+                <h5 class="mb-3">
+                    Are you sure you want to delete this salary record?
+                </h5>
+
+
+                <p class="mb-1">
+
+                    <strong>Teacher:</strong>
+
+                    {{ salary.teacher.first_name }}
+                    {{ salary.teacher.last_name }}
+
+                </p>
+
+
+                <p class="mb-1">
+
+                    <strong>Month:</strong>
+
+                    {{ salary.month|date:"F Y" }}
+
+                </p>
+
+
+                <p class="mb-4">
+
+                    <strong>Net Salary:</strong>
+
+                    Rs. {{ salary.net_salary }}
+
+                </p>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <a
+                        href="{% url 'teachers:salary_list' %}"
+                        class="btn btn-secondary">
+                        Cancel
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger">
+
+                        Yes, Delete
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

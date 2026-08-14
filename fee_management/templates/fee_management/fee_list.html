@@ -1,0 +1,365 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Fee Records
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <h2>Fee Records</h2>
+
+    <div>
+
+        <a
+            href="{% url 'fee_management:fee_dashboard' %}"
+            class="btn btn-dark">
+
+            Dashboard
+
+        </a>
+
+        <a
+            href="{% url 'fee_management:add_fee' %}"
+            class="btn btn-success">
+
+            + Collect Fee
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- SEARCH & FILTER -->
+
+<div class="card shadow mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Search & Filter Fees
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Search
+                    </label>
+
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ query }}"
+                        class="form-control"
+                        placeholder="Receipt No, Admission No or Student">
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Month
+                    </label>
+
+                    <select
+                        name="month"
+                        class="form-select">
+
+                        <option value="">
+                            All Months
+                        </option>
+
+                        {% for value, label in month_choices %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if month == value %}
+                                selected
+                                {% endif %}>
+
+                                {{ label }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Year
+                    </label>
+
+                    <input
+                        type="number"
+                        name="year"
+                        value="{{ year }}"
+                        class="form-control"
+                        placeholder="Year">
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Payment Method
+                    </label>
+
+                    <select
+                        name="payment_method"
+                        class="form-select">
+
+                        <option value="">
+                            All
+                        </option>
+
+                        {% for value, label in payment_methods %}
+
+                            <option
+                                value="{{ value }}"
+                                {% if payment_method == value %}
+                                selected
+                                {% endif %}>
+
+                                {{ label }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-2 mb-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <select
+                        name="paid"
+                        class="form-select">
+
+                        <option value="">
+                            All
+                        </option>
+
+                        <option
+                            value="paid"
+                            {% if paid == "paid" %}
+                            selected
+                            {% endif %}>
+
+                            Paid
+
+                        </option>
+
+                        <option
+                            value="unpaid"
+                            {% if paid == "unpaid" %}
+                            selected
+                            {% endif %}>
+
+                            Pending
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                Search / Filter
+
+            </button>
+
+
+            <a
+                href="{% url 'fee_management:fee_list' %}"
+                class="btn btn-secondary">
+
+                Reset
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- FEE TABLE -->
+
+<div class="card shadow">
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Receipt No</th>
+                        <th>Student</th>
+                        <th>Month</th>
+                        <th>Total</th>
+                        <th>Paid</th>
+                        <th>Remaining</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for fee in fees %}
+
+                    <tr>
+
+                        <td>
+                            {{ fee.receipt_no }}
+                        </td>
+
+
+                        <td>
+
+                            {{ fee.student.first_name }}
+                            {{ fee.student.last_name }}
+
+                            <br>
+
+                            <small class="text-muted">
+                                {{ fee.student.admission_no }}
+                            </small>
+
+                        </td>
+
+
+                        <td>
+                            {{ fee.month }} {{ fee.year }}
+                        </td>
+
+
+                        <td>
+                            Rs. {{ fee.total_amount }}
+                        </td>
+
+
+                        <td>
+                            Rs. {{ fee.amount_paid }}
+                        </td>
+
+
+                        <td>
+                            Rs. {{ fee.remaining_amount }}
+                        </td>
+
+
+                        <td>
+
+                            {% if fee.paid %}
+
+                                <span class="badge bg-success">
+                                    Paid
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                href="{% url 'fee_management:fee_detail' fee.pk %}"
+                                class="btn btn-sm btn-info">
+
+                                View
+
+                            </a>
+
+                            <a
+                                href="{% url 'fee_management:edit_fee' fee.pk %}"
+                                class="btn btn-sm btn-warning">
+
+                                Edit
+
+                            </a>
+
+                            <a
+                                href="{% url 'fee_management:delete_fee' fee.pk %}"
+                                class="btn btn-sm btn-danger">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="text-center">
+
+                            No Fee Records Found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Results Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="fw-bold mb-1">
+            Results Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            Academic Results Management
+        </p>
+    </div>
+
+    <div>
+
+        <a
+            href="{% url 'results:result_list' %}"
+            class="btn btn-primary">
+
+            View Results
+
+        </a>
+
+        <a
+            href="{% url 'results:add_result' %}"
+            class="btn btn-success">
+
+            + Add Result
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Statistics -->
+
+<div class="row g-4 mb-4">
+
+
+    <!-- Total Results -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Total Results
+                </h6>
+
+                <h2 class="fw-bold">
+                    {{ total_results }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Average Marks -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Average Marks
+                </h6>
+
+                <h2 class="fw-bold text-primary">
+                    {{ average_marks }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Passed -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Passed Results
+                </h6>
+
+                <h2 class="fw-bold text-success">
+                    {{ passed_results }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Failed -->
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Failed Results
+                </h6>
+
+                <h2 class="fw-bold text-danger">
+                    {{ failed_results }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Result Summary -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Result Summary
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-4">
+
+                <div class="p-3">
+
+                    <h6 class="text-muted">
+                        Total Results
+                    </h6>
+
+                    <h3>
+                        {{ total_results }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="p-3">
+
+                    <h6 class="text-muted">
+                        Passed
+                    </h6>
+
+                    <h3 class="text-success">
+                        {{ passed_results }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="p-3">
+
+                    <h6 class="text-muted">
+                        Failed
+                    </h6>
+
+                    <h3 class="text-danger">
+                        {{ failed_results }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Quick Actions -->
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            Quick Actions
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+
+            <div class="col-md-4 mb-3">
+
+                <a
+                    href="{% url 'results:add_result' %}"
+                    class="btn btn-success w-100">
+
+                    + Add New Result
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <a
+                    href="{% url 'results:result_list' %}"
+                    class="btn btn-primary w-100">
+
+                    View Results List
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <a
+                    href="/"
+                    class="btn btn-outline-secondary w-100">
+
+                    Back to Home
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

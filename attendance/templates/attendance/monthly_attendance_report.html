@@ -1,0 +1,383 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Monthly Attendance Report
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Monthly Attendance Report</h2>
+
+        <button
+            onclick="window.print()"
+            class="btn btn-dark no-print">
+
+            🖨 Print Report
+
+        </button>
+
+    </div>
+
+
+    <div class="card shadow mb-4 no-print">
+
+        <div class="card-header bg-dark text-white">
+
+            Monthly Report Filters
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form method="GET">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Month
+                        </label>
+
+                        <select
+                            name="month"
+                            class="form-select">
+
+                            <option value="">
+                                All Months
+                            </option>
+
+                            <option value="1"
+                                {% if month == "1" %}selected{% endif %}>
+                                January
+                            </option>
+
+                            <option value="2"
+                                {% if month == "2" %}selected{% endif %}>
+                                February
+                            </option>
+
+                            <option value="3"
+                                {% if month == "3" %}selected{% endif %}>
+                                March
+                            </option>
+
+                            <option value="4"
+                                {% if month == "4" %}selected{% endif %}>
+                                April
+                            </option>
+
+                            <option value="5"
+                                {% if month == "5" %}selected{% endif %}>
+                                May
+                            </option>
+
+                            <option value="6"
+                                {% if month == "6" %}selected{% endif %}>
+                                June
+                            </option>
+
+                            <option value="7"
+                                {% if month == "7" %}selected{% endif %}>
+                                July
+                            </option>
+
+                            <option value="8"
+                                {% if month == "8" %}selected{% endif %}>
+                                August
+                            </option>
+
+                            <option value="9"
+                                {% if month == "9" %}selected{% endif %}>
+                                September
+                            </option>
+
+                            <option value="10"
+                                {% if month == "10" %}selected{% endif %}>
+                                October
+                            </option>
+
+                            <option value="11"
+                                {% if month == "11" %}selected{% endif %}>
+                                November
+                            </option>
+
+                            <option value="12"
+                                {% if month == "12" %}selected{% endif %}>
+                                December
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Year
+                        </label>
+
+                        <input
+                            type="number"
+                            name="year"
+                            value="{{ year }}"
+                            class="form-control"
+                            placeholder="2026">
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Class
+                        </label>
+
+                        <select
+                            name="classroom"
+                            class="form-select">
+
+                            <option value="">
+                                All Classes
+                            </option>
+
+                            {% for classroom in classrooms %}
+
+                                <option
+                                    value="{{ classroom.id }}"
+                                    {% if classroom.id|stringformat:"s" == classroom_id %}
+                                    selected
+                                    {% endif %}>
+
+                                    {{ classroom }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select
+                            name="section"
+                            class="form-select">
+
+                            <option value="">
+                                All Sections
+                            </option>
+
+                            {% for section in sections %}
+
+                                <option
+                                    value="{{ section.id }}"
+                                    {% if section.id|stringformat:"s" == section_id %}
+                                    selected
+                                    {% endif %}>
+
+                                    {{ section }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-3">
+
+                    <button
+                        class="btn btn-success">
+
+                        Apply Filter
+
+                    </button>
+
+                    <a
+                        href="{% url 'attendance:monthly_attendance_report' %}"
+                        class="btn btn-secondary">
+
+                        Reset
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <h3 class="text-center">
+                SHAHEEN COACHING CENTER
+            </h3>
+
+            <h5 class="text-center">
+                Monthly Attendance Report
+            </h5>
+
+            {% if month or year %}
+
+                <p class="text-center">
+
+                    {% if month %}
+                        Month: {{ month }}
+                    {% endif %}
+
+                    {% if year %}
+                        | Year: {{ year }}
+                    {% endif %}
+
+                </p>
+
+            {% endif %}
+
+
+            <div class="table-responsive mt-4">
+
+                <table class="table table-bordered">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+                            <th>Admission No.</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Total Days</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Leave</th>
+                            <th>Attendance %</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for student in report_data %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ student.admission_no }}
+                            </td>
+
+                            <td>
+                                {{ student.name }}
+                            </td>
+
+                            <td>
+                                {{ student.classroom }}
+                            </td>
+
+                            <td>
+                                {{ student.section }}
+                            </td>
+
+                            <td>
+                                {{ student.total }}
+                            </td>
+
+                            <td class="text-success">
+                                {{ student.present }}
+                            </td>
+
+                            <td class="text-danger">
+                                {{ student.absent }}
+                            </td>
+
+                            <td class="text-warning">
+                                {{ student.leave }}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    {{ student.percentage }}%
+                                </strong>
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td
+                                colspan="10"
+                                class="text-center">
+
+                                No attendance records found.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        font-size: 11px;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+}
+
+</style>
+
+{% endblock %}

@@ -1,0 +1,560 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Result Card</title>
+
+    <style>
+
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+        }
+
+        body {
+            font-family: "Times New Roman", serif;
+        }
+
+
+        /* =================================================
+           RESULT CARD PAGE
+        ================================================= */
+
+        .page {
+
+            width: 297mm;
+            height: 210mm;
+
+            position: relative;
+
+            overflow: hidden;
+
+            background-color: white;
+
+            background-image: url("{% static 'images/result_card_template.png' %}");
+
+            background-repeat: no-repeat;
+
+            background-size: 100% 100%;
+
+            background-position: center;
+        }
+
+
+        /* =================================================
+           DYNAMIC FIELDS
+        ================================================= */
+
+        .field {
+
+            position: absolute;
+
+            font-family: "Times New Roman", serif;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: #000;
+
+            white-space: nowrap;
+        }
+
+
+        /* Student Name */
+
+        .student-name {
+
+            left: 18%;
+
+            top: 16.7%;
+        }
+
+
+        /* Father Name */
+
+        .father-name {
+
+            left: 18%;
+
+            top: 20.0%;
+        }
+
+
+        /* Student ID */
+
+        .student-id {
+
+            left: 71%;
+
+            top: 16.7%;
+        }
+
+
+        /* Class */
+
+        .class-name {
+
+            left: 71%;
+
+            top: 20.0%;
+        }
+
+
+        /* =================================================
+           SUBJECT ROW
+        ================================================= */
+
+        .subject-row {
+
+            position: absolute;
+
+            left: 2.95%;
+
+            width: 90.2%;
+
+            height: 3.0%;
+
+            display: grid;
+
+            grid-template-columns:
+                15.2%
+                19.1%
+                19.1%
+                21.5%
+                25.1%;
+
+            align-items: center;
+
+            font-size: 11px;
+
+            font-weight: bold;
+
+            text-align: center;
+        }
+
+
+        .subject-row .subject {
+
+            text-align: left;
+
+            padding-left: 5px;
+        }
+
+
+        /* =================================================
+           SUBJECT ROW POSITIONS
+        ================================================= */
+
+        .row-1 {
+            top: 36.8%;
+        }
+
+        .row-2 {
+            top: 39.7%;
+        }
+
+        .row-3 {
+            top: 42.6%;
+        }
+
+        .row-4 {
+            top: 45.5%;
+        }
+
+        .row-5 {
+            top: 48.4%;
+        }
+
+        .row-6 {
+            top: 51.3%;
+        }
+
+        .row-7 {
+            top: 54.2%;
+        }
+
+        .row-8 {
+            top: 57.1%;
+        }
+
+
+        /* =================================================
+           GRAND RESULT
+        ================================================= */
+
+        .final-result {
+
+            position: absolute;
+
+            left: 14.2%;
+
+            top: 68.1%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .grade {
+
+            position: absolute;
+
+            left: 14.2%;
+
+            top: 72.0%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .position {
+
+            position: absolute;
+
+            left: 14.2%;
+
+            top: 75.8%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .grand-total {
+
+            position: absolute;
+
+            left: 72.0%;
+
+            top: 68.1%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .grand-obtained {
+
+            position: absolute;
+
+            left: 72.0%;
+
+            top: 72.0%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .grand-percentage {
+
+            position: absolute;
+
+            left: 72.0%;
+
+            top: 75.8%;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        /* =================================================
+           PRINT BUTTON
+        ================================================= */
+
+        .print-button {
+
+            position: fixed;
+
+            top: 15px;
+
+            right: 15px;
+
+            z-index: 9999;
+        }
+
+
+        .print-button button {
+
+            padding: 10px 18px;
+
+            border: none;
+
+            border-radius: 5px;
+
+            background: #212529;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        /* =================================================
+           SCREEN
+        ================================================= */
+
+        @media screen {
+
+            body {
+
+                background: #ddd;
+            }
+
+            .page {
+
+                margin: 20px auto;
+
+                box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            }
+        }
+
+
+        /* =================================================
+           PRINT
+        ================================================= */
+
+        @media print {
+
+            body {
+
+                background: white;
+            }
+
+            .print-button {
+
+                display: none !important;
+            }
+
+            .page {
+
+                margin: 0;
+
+                box-shadow: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+{% if error %}
+
+    <div style="
+        padding:40px;
+        text-align:center;
+        font-family:Arial;
+    ">
+
+        <h2>{{ error }}</h2>
+
+    </div>
+
+{% else %}
+
+
+<!-- =================================================
+     PRINT BUTTON
+================================================== -->
+
+<div class="print-button">
+
+    <button onclick="window.print()">
+
+        🖨 Print / Save PDF
+
+    </button>
+
+</div>
+
+
+<!-- =================================================
+     IMPORTANT:
+     COMPLETE RESULT CARD IS INSIDE .page
+================================================== -->
+
+<div class="page">
+
+
+    <!-- =================================================
+         STUDENT INFORMATION
+    ================================================== -->
+
+
+    <div class="field student-name">
+
+        {{ student.first_name }}
+        {{ student.last_name }}
+
+    </div>
+
+
+    <div class="field father-name">
+
+        {{ student.father_name }}
+
+    </div>
+
+
+    <div class="field student-id">
+
+        {{ student.admission_no }}
+
+    </div>
+
+
+    <div class="field class-name">
+
+        {{ classroom }}
+
+    </div>
+
+
+    <!-- =================================================
+         SUBJECT RESULTS
+    ================================================== -->
+
+
+    {% for result in results %}
+
+        {% if forloop.counter <= 8 %}
+
+            <div class="subject-row row-{{ forloop.counter }}">
+
+                <div class="subject">
+
+                    {{ result.subject.name }}
+
+                </div>
+
+
+                <div>
+
+                    {{ result.total_marks }}
+
+                </div>
+
+
+                <div>
+
+                    {{ result.obtained_marks }}
+
+                </div>
+
+
+                <div>
+
+                    {{ result.percentage }}%
+
+                </div>
+
+
+                <div>
+
+                    {% if result.percentage >= 40 %}
+
+                        PASS
+
+                    {% else %}
+
+                        FAIL
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    <!-- =================================================
+         GRAND RESULT
+    ================================================== -->
+
+
+    <div class="final-result">
+
+        {{ final_result }}
+
+    </div>
+
+
+    <div class="grade">
+
+        {{ grade }}
+
+    </div>
+
+
+    <div class="position">
+
+        {{ position }}
+
+    </div>
+
+
+    <div class="grand-total">
+
+        {{ total_marks }}
+
+    </div>
+
+
+    <div class="grand-obtained">
+
+        {{ obtained_marks }}
+
+    </div>
+
+
+    <div class="grand-percentage">
+
+        {{ percentage }}%
+
+    </div>
+
+
+</div>
+
+
+{% endif %}
+
+</body>
+</html>

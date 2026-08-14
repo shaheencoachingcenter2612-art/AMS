@@ -1,0 +1,235 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Timetable Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2>
+            Timetable Detail
+        </h2>
+
+        <p class="text-muted mb-0">
+            Complete timetable entry information
+        </p>
+
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'timetable:timetable_list' %}"
+            class="btn btn-secondary">
+
+            Back
+
+        </a>
+
+        <a
+            href="{% url 'timetable:edit_timetable' entry.pk %}"
+            class="btn btn-warning">
+
+            Edit
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            Schedule Information
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Session
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.session }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Class
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.classroom }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Section
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.section }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Subject
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.subject }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Teacher
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.teacher }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Day
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.day }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Start Time
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.start_time }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    End Time
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.end_time }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Room / Hall
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.room|default:"-" }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6">
+
+                <strong>
+                    Remarks
+                </strong>
+
+                <div class="border rounded p-3 mt-1">
+                    {{ entry.remarks|default:"-" }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <hr class="my-4">
+
+
+        <div class="d-flex justify-content-between">
+
+            <a
+                href="{% url 'timetable:timetable_list' %}"
+                class="btn btn-secondary">
+
+                Back to Timetable
+
+            </a>
+
+
+            <div class="d-flex gap-2">
+
+                <a
+                    href="{% url 'timetable:edit_timetable' entry.pk %}"
+                    class="btn btn-warning">
+
+                    Edit
+
+                </a>
+
+                <a
+                    href="{% url 'timetable:delete_timetable' entry.pk %}"
+                    class="btn btn-danger">
+
+                    Delete
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

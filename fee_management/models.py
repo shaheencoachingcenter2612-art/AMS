@@ -1,6 +1,7 @@
 from django.db import models
 from students.models import Student
 from academics.models import ClassRoom
+from datetime import datetime
 
 
 class FeeStructure(models.Model):
@@ -16,6 +17,12 @@ class FeeStructure(models.Model):
     )
 
     admission_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    registration_fee = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0
@@ -48,6 +55,20 @@ class Fee(models.Model):
         ("December", "December"),
     ]
 
+    PAYMENT_METHODS = [
+        ("Cash", "Cash"),
+        ("Bank", "Bank"),
+        ("JazzCash", "JazzCash"),
+        ("EasyPaisa", "EasyPaisa"),
+    ]
+
+    receipt_no = models.CharField(
+        max_length=20,
+        unique=True,
+        blank=True,
+        null=True
+    )
+
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE
@@ -60,9 +81,56 @@ class Fee(models.Model):
 
     year = models.PositiveIntegerField()
 
-    amount = models.DecimalField(
+    monthly_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    admission_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    exam_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    discount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    fine = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    total_amount = models.DecimalField(
         max_digits=10,
         decimal_places=2
+    )
+
+    amount_paid = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    remaining_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHODS,
+        default="Cash"
     )
 
     paid = models.BooleanField(
@@ -82,5 +150,37 @@ class Fee(models.Model):
         auto_now_add=True
     )
 
+    def save(self, *args, **kwargs):
+
+        if not self.receipt_no:
+
+            year = datetime.now().year
+
+            last_fee = Fee.objects.order_by("-id").first()
+
+            if last_fee and last_fee.receipt_no:
+
+                try:
+                    last_number = int(
+                        last_fee.receipt_no.split("-")[-1]
+                    )
+                except ValueError:
+                    last_number = 0
+
+            else:
+                last_number = 0
+
+            self.receipt_no = (
+                f"RCP-{year}-{last_number + 1:05d}"
+            )
+
+        self.remaining_amount = (
+            self.total_amount - self.amount_paid
+        )
+
+        self.paid = self.remaining_amount <= 0
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.student} - {self.month} {self.year}"
+        return f"{self.receipt_no} - {self.student}"

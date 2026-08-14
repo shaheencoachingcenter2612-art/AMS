@@ -1,0 +1,243 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Timetable Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="mb-1">
+            Timetable Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            Academic Timetable Management
+        </p>
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'timetable:timetable_list' %}"
+            class="btn btn-secondary">
+
+            View Timetable
+
+        </a>
+
+        <a
+            href="{% url 'timetable:add_timetable' %}"
+            class="btn btn-primary">
+
+            + Add Timetable
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- SUMMARY -->
+
+<div class="row mb-4">
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Total Entries
+                </h6>
+
+                <h2 class="fw-bold">
+                    {{ entries|length }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Schedule
+                </h6>
+
+                <h2 class="fw-bold text-primary">
+                    Weekly
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card shadow border-0">
+
+            <div class="card-body text-center">
+
+                <h6 class="text-muted">
+                    Status
+                </h6>
+
+                <h2 class="fw-bold text-success">
+                    Active
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TIMETABLE -->
+
+<div class="card shadow border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            Weekly Timetable
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        {% if entries %}
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Room</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for entry in entries %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ entry.day }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ entry.start_time }}
+                            -
+                            {{ entry.end_time }}
+                        </td>
+
+                        <td>
+                            {{ entry.classroom }}
+                        </td>
+
+                        <td>
+                            {{ entry.section }}
+                        </td>
+
+                        <td>
+                            {{ entry.subject }}
+                        </td>
+
+                        <td>
+                            {{ entry.teacher }}
+                        </td>
+
+                        <td>
+                            {{ entry.room|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'timetable:timetable_detail' entry.pk %}"
+                                class="btn btn-sm btn-info text-white">
+
+                                View
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+
+            <h5 class="text-muted">
+                No timetable entries found.
+            </h5>
+
+            <p class="text-muted">
+                Start by adding your first timetable entry.
+            </p>
+
+            <a
+                href="{% url 'timetable:add_timetable' %}"
+                class="btn btn-primary">
+
+                + Add First Timetable
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,385 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Result Detail
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h1 class="fw-bold mb-1">
+            Result Detail
+        </h1>
+
+        <p class="text-muted mb-0">
+            Complete examination result
+        </p>
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'results:result_list' %}"
+            class="btn btn-secondary">
+            Back to Results
+        </a>
+
+        <a
+            href="{% url 'results:edit_result' result.pk %}"
+            class="btn btn-warning">
+            Edit Result
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- Student Information -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            Student Information
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <strong>Student Name:</strong>
+                <div>
+                    {{ result.student.first_name }}
+                    {{ result.student.last_name }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Admission No:</strong>
+                <div>
+                    {{ result.student.admission_no }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Session:</strong>
+                <div>
+                    {{ result.session }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Class:</strong>
+                <div>
+                    {{ result.classroom }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Section:</strong>
+                <div>
+                    {{ result.section }}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong>Subject:</strong>
+                <div>
+                    {{ result.subject }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Examination Information -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Examination Information
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <strong>Exam Type:</strong>
+
+                <div>
+                    {{ result.exam_type }}
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <strong>Exam Date:</strong>
+
+                <div>
+                    {{ result.exam_date }}
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <strong>Total Marks:</strong>
+
+                <div>
+                    {{ result.total_marks }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Result -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h5 class="mb-0">
+            Result
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center g-4">
+
+            <!-- Total Marks -->
+
+            <div class="col-md-4">
+
+                <div class="border rounded p-4">
+
+                    <h6 class="text-muted">
+                        Total Marks
+                    </h6>
+
+                    <h2 class="fw-bold">
+                        {{ result.total_marks }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- Obtained Marks -->
+
+            <div class="col-md-4">
+
+                <div class="border rounded p-4">
+
+                    <h6 class="text-muted">
+                        Obtained Marks
+                    </h6>
+
+                    <h2 class="fw-bold text-primary">
+                        {{ result.obtained_marks }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- Percentage -->
+
+            <div class="col-md-4">
+
+                <div class="border rounded p-4">
+
+                    <h6 class="text-muted">
+                        Percentage
+                    </h6>
+
+                    <h2 class="fw-bold text-success">
+
+                        {{ result.percentage }}%
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Grade & Status -->
+
+        <div class="row text-center mt-4">
+
+            <!-- Grade -->
+
+            <div class="col-md-6">
+
+                <h6 class="text-muted">
+                    Grade
+                </h6>
+
+                <h2 class="fw-bold">
+
+                    {% if result.grade == "A+" %}
+
+                        <span class="badge bg-success fs-5">
+                            A+
+                        </span>
+
+                    {% elif result.grade == "A" %}
+
+                        <span class="badge bg-success fs-5">
+                            A
+                        </span>
+
+                    {% elif result.grade == "B" %}
+
+                        <span class="badge bg-primary fs-5">
+                            B
+                        </span>
+
+                    {% elif result.grade == "C" %}
+
+                        <span class="badge bg-info fs-5">
+                            C
+                        </span>
+
+                    {% elif result.grade == "D" %}
+
+                        <span class="badge bg-warning text-dark fs-5">
+                            D
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger fs-5">
+                            F
+                        </span>
+
+                    {% endif %}
+
+                </h2>
+
+            </div>
+
+
+            <!-- Pass / Fail -->
+
+            <div class="col-md-6">
+
+                <h6 class="text-muted">
+                    Status
+                </h6>
+
+                {% if result.percentage >= 40 %}
+
+                    <span class="badge bg-success fs-5 px-4 py-2">
+                        PASS
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger fs-5 px-4 py-2">
+                        FAIL
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Remarks -->
+
+{% if result.remarks %}
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header">
+
+        <h5 class="mb-0">
+            Remarks
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        {{ result.remarks }}
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<!-- Actions -->
+
+<div class="d-flex justify-content-between">
+
+    <a
+        href="{% url 'results:result_list' %}"
+        class="btn btn-outline-secondary">
+
+        Back to Results
+
+    </a>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'results:edit_result' result.pk %}"
+            class="btn btn-warning">
+
+            Edit
+
+        </a>
+
+        <a
+            href="{% url 'results:delete_result' result.pk %}"
+            class="btn btn-danger">
+
+            Delete
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

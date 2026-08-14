@@ -1,0 +1,183 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Timetable List
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2>
+            Timetable
+        </h2>
+
+        <p class="text-muted mb-0">
+            Complete weekly academic schedule
+        </p>
+    </div>
+
+    <div class="d-flex gap-2">
+
+        <a
+            href="{% url 'timetable:timetable_dashboard' %}"
+            class="btn btn-secondary">
+
+            Dashboard
+
+        </a>
+
+        <a
+            href="{% url 'timetable:add_timetable' %}"
+            class="btn btn-primary">
+
+            + Add Timetable
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow border-0">
+
+    <div class="card-body">
+
+        {% if entries %}
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>#</th>
+                        <th>Day</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Subject</th>
+                        <th>Teacher</th>
+                        <th>Room</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for entry in entries %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ entry.day }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ entry.start_time }}
+                        </td>
+
+                        <td>
+                            {{ entry.end_time }}
+                        </td>
+
+                        <td>
+                            {{ entry.classroom }}
+                        </td>
+
+                        <td>
+                            {{ entry.section }}
+                        </td>
+
+                        <td>
+                            {{ entry.subject }}
+                        </td>
+
+                        <td>
+                            {{ entry.teacher }}
+                        </td>
+
+                        <td>
+                            {{ entry.room|default:"-" }}
+                        </td>
+
+                        <td>
+
+                            <div class="d-flex gap-1">
+
+                                <a
+                                    href="{% url 'timetable:timetable_detail' entry.pk %}"
+                                    class="btn btn-sm btn-info text-white">
+
+                                    View
+
+                                </a>
+
+                                <a
+                                    href="{% url 'timetable:edit_timetable' entry.pk %}"
+                                    class="btn btn-sm btn-warning">
+
+                                    Edit
+
+                                </a>
+
+                                <a
+                                    href="{% url 'timetable:delete_timetable' entry.pk %}"
+                                    class="btn btn-sm btn-danger">
+
+                                    Delete
+
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+
+            <h5 class="text-muted">
+                No timetable entries found.
+            </h5>
+
+            <a
+                href="{% url 'timetable:add_timetable' %}"
+                class="btn btn-primary mt-2">
+
+                + Add Timetable
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

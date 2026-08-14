@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Salary List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .actions {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 9px 14px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .btn.secondary {
+            background: #555;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+        }
+
+        input, select {
+            padding: 9px;
+            margin-right: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .paid {
+            color: green;
+            font-weight: bold;
+        }
+
+        .unpaid {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Salary Records</h1>
+
+    <div class="actions">
+
+        <a href="{% url 'salary:salary_dashboard' %}" class="btn secondary">
+            Dashboard
+        </a>
+
+        <a href="{% url 'salary:add_salary' %}" class="btn">
+            + Add Salary
+        </a>
+
+    </div>
+
+    <form method="get">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search teacher..."
+            value="{{ query }}"
+        >
+
+        <select name="month">
+
+            <option value="">All Months</option>
+
+            {% for value, label in month_choices %}
+
+                <option
+                    value="{{ value }}"
+                    {% if month == value %}selected{% endif %}
+                >
+                    {{ label }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <input
+            type="number"
+            name="year"
+            placeholder="Year"
+            value="{{ year }}"
+        >
+
+        <select name="paid">
+
+            <option value="">All Status</option>
+
+            <option value="paid"
+                {% if paid == "paid" %}selected{% endif %}>
+                Paid
+            </option>
+
+            <option value="unpaid"
+                {% if paid == "unpaid" %}selected{% endif %}>
+                Unpaid
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Teacher</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Basic</th>
+                <th>Allowance</th>
+                <th>Deduction</th>
+                <th>Net Salary</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for salary in salaries %}
+
+            <tr>
+
+                <td>{{ salary.teacher }}</td>
+
+                <td>{{ salary.month }}</td>
+
+                <td>{{ salary.year }}</td>
+
+                <td>Rs. {{ salary.basic_salary }}</td>
+
+                <td>Rs. {{ salary.allowance }}</td>
+
+                <td>Rs. {{ salary.deduction }}</td>
+
+                <td><strong>Rs. {{ salary.net_salary }}</strong></td>
+
+                <td>
+
+                    {% if salary.paid %}
+                        <span class="paid">Paid</span>
+                    {% else %}
+                        <span class="unpaid">Unpaid</span>
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a href="{% url 'salary:salary_detail' salary.pk %}">
+                        View
+                    </a>
+
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+                <td colspan="9">
+                    No salary records found.
+                </td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+</body>
+</html>

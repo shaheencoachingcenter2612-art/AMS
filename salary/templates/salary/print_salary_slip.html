@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Salary Slip - {{ salary.teacher }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .slip {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border: 1px solid #ddd;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #222;
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .header h2 {
+            margin: 8px 0;
+            font-size: 20px;
+        }
+
+        .header p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .info div {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .info strong {
+            display: inline-block;
+            width: 120px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #f0f0f0;
+            text-align: left;
+        }
+
+        td:last-child,
+        th:last-child {
+            text-align: right;
+        }
+
+        .net-salary {
+            font-size: 18px;
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+
+        .status {
+            margin-top: 25px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            font-weight: bold;
+        }
+
+        .remarks {
+            margin-top: 25px;
+        }
+
+        .signature-area {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 70px;
+        }
+
+        .signature {
+            width: 200px;
+            text-align: center;
+            border-top: 1px solid #222;
+            padding-top: 8px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            margin: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            background: #007bff;
+        }
+
+        .print-btn {
+            background: #28a745;
+        }
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .slip {
+                border: none;
+                max-width: none;
+            }
+
+            .buttons {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="slip">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>ACADEMY</h1>
+
+        <h2>SALARY SLIP</h2>
+
+        <p>
+            Salary for {{ salary.month }} {{ salary.year }}
+        </p>
+
+    </div>
+
+
+    <!-- TEACHER INFORMATION -->
+
+    <div class="info">
+
+        <div>
+            <strong>Teacher:</strong>
+            {{ salary.teacher }}
+        </div>
+
+        <div>
+            <strong>Month:</strong>
+            {{ salary.month }}
+        </div>
+
+        <div>
+            <strong>Year:</strong>
+            {{ salary.year }}
+        </div>
+
+        <div>
+            <strong>Payment Date:</strong>
+
+            {% if salary.payment_date %}
+                {{ salary.payment_date }}
+            {% else %}
+                Not Paid
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- SALARY BREAKDOWN -->
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>Description</th>
+                <th>Amount (Rs.)</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>Basic Salary</td>
+                <td>
+                    {{ salary.basic_salary }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Allowance</td>
+                <td>
+                    {{ salary.allowance }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Advance</td>
+                <td>
+                    - {{ salary.advance }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Deduction</td>
+                <td>
+                    - {{ salary.deduction }}
+                </td>
+            </tr>
+
+            <tr class="net-salary">
+
+                <td>
+                    NET SALARY
+                </td>
+
+                <td>
+                    Rs. {{ salary.net_salary }}
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <!-- PAYMENT STATUS -->
+
+    <div class="status">
+
+        Payment Status:
+
+        {% if salary.paid %}
+
+            <span style="color: green;">
+                PAID
+            </span>
+
+        {% else %}
+
+            <span style="color: red;">
+                UNPAID
+            </span>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- PAYMENT METHOD -->
+
+    <div class="info" style="margin-top: 15px;">
+
+        <div>
+            <strong>Payment Method:</strong>
+
+            {% if salary.payment_method %}
+                {{ salary.payment_method }}
+            {% else %}
+                —
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- REMARKS -->
+
+    <div class="remarks">
+
+        <strong>Remarks:</strong>
+
+        <p>
+            {% if salary.remarks %}
+                {{ salary.remarks }}
+            {% else %}
+                —
+            {% endif %}
+        </p>
+
+    </div>
+
+
+    <!-- SIGNATURES -->
+
+    <div class="signature-area">
+
+        <div class="signature">
+            Teacher Signature
+        </div>
+
+        <div class="signature">
+            Authorized Signature
+        </div>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <button
+            onclick="window.print()"
+            class="btn print-btn"
+        >
+            Print Salary Slip
+        </button>
+
+        <a
+            href="{% url 'salary:salary_detail' salary.pk %}"
+            class="btn"
+        >
+            Back to Salary
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

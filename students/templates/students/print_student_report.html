@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Student Report
+    </title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            margin: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 7px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        @media print {
+
+            body {
+                margin: 10px;
+            }
+
+            .no-print {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="header">
+
+    <h1>
+        SHAHEEN COACHING CENTER
+    </h1>
+
+    <p>
+        Academic Management System
+    </p>
+
+    <h2>
+        Student Report
+    </h2>
+
+</div>
+
+
+<button
+    class="no-print"
+    onclick="window.print()">
+
+    🖨 Print
+
+</button>
+
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>#</th>
+            <th>Admission No</th>
+            <th>Student Name</th>
+            <th>Father Name</th>
+            <th>Class</th>
+            <th>Section</th>
+            <th>Gender</th>
+            <th>Phone</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for student in students %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+            <td>
+                {{ student.admission_no }}
+            </td>
+
+            <td>
+                {{ student.first_name }}
+                {{ student.last_name }}
+            </td>
+
+            <td>
+                {{ student.father_name }}
+            </td>
+
+            <td>
+                {{ student.classroom }}
+            </td>
+
+            <td>
+                {{ student.section }}
+            </td>
+
+            <td>
+                {{ student.gender }}
+            </td>
+
+            <td>
+                {{ student.phone }}
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td
+                colspan="8"
+                style="text-align:center;">
+
+                No students found.
+
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+<div class="footer">
+
+    Total Students:
+    <strong>{{ students|length }}</strong>
+
+</div>
+
+
+</body>
+
+</html>

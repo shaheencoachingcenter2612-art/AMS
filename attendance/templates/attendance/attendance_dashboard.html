@@ -1,0 +1,668 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Attendance Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="mb-1">
+            Attendance Dashboard
+        </h2>
+
+        <p class="text-muted mb-0">
+            Monitor student attendance and attendance performance.
+        </p>
+    </div>
+
+    <div>
+
+        <a
+            href="{% url 'attendance:add_attendance' %}"
+            class="btn btn-primary">
+
+            + Mark Attendance
+
+        </a>
+
+        <a
+            href="{% url 'attendance:attendance_list' %}"
+            class="btn btn-outline-secondary">
+
+            View Records
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     OVERALL STATISTICS
+===================================================== -->
+
+<div class="row">
+
+    <!-- TOTAL -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted mb-2">
+                            Total Records
+                        </h6>
+
+                        <h2 class="mb-0">
+                            {{ total }}
+                        </h2>
+
+                    </div>
+
+                    <div class="fs-1">
+                        📊
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRESENT -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted mb-2">
+                            Present
+                        </h6>
+
+                        <h2 class="text-success mb-0">
+                            {{ present }}
+                        </h2>
+
+                    </div>
+
+                    <div class="fs-1">
+                        ✅
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ABSENT -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted mb-2">
+                            Absent
+                        </h6>
+
+                        <h2 class="text-danger mb-0">
+                            {{ absent }}
+                        </h2>
+
+                    </div>
+
+                    <div class="fs-1">
+                        ❌
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEAVE -->
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow-sm border-0 h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <h6 class="text-muted mb-2">
+                            Leave
+                        </h6>
+
+                        <h2 class="text-warning mb-0">
+                            {{ leave }}
+                        </h2>
+
+                    </div>
+
+                    <div class="fs-1">
+                        🟡
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TODAY'S ATTENDANCE
+===================================================== -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+                Today's Attendance
+            </h5>
+
+            <span>
+                {{ today }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row text-center">
+
+            <div class="col-md-3 mb-3">
+
+                <h6 class="text-muted">
+                    Total
+                </h6>
+
+                <h3>
+                    {{ today_total }}
+                </h3>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <h6 class="text-muted">
+                    Present
+                </h6>
+
+                <h3 class="text-success">
+                    {{ today_present }}
+                </h3>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <h6 class="text-muted">
+                    Absent
+                </h6>
+
+                <h3 class="text-danger">
+                    {{ today_absent }}
+                </h3>
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <h6 class="text-muted">
+                    Leave
+                </h6>
+
+                <h3 class="text-warning">
+                    {{ today_leave }}
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+
+        <div class="row align-items-center">
+
+            <div class="col-md-9">
+
+                <h6 class="mb-2">
+                    Today's Attendance Percentage
+                </h6>
+
+                <div
+                    class="progress"
+                    style="height: 25px;">
+
+                    <div
+                        class="progress-bar
+                        {% if today_percentage >= 75 %}
+                            bg-success
+                        {% elif today_percentage >= 50 %}
+                            bg-warning
+                        {% else %}
+                            bg-danger
+                        {% endif %}"
+                        role="progressbar"
+                        style="width: {{ today_percentage }}%;">
+
+                        {{ today_percentage }}%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 text-center">
+
+                <h2 class="mb-0">
+                    {{ today_percentage }}%
+                </h2>
+
+                <small class="text-muted">
+                    Today's Attendance
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     OVERALL ATTENDANCE
+===================================================== -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-body">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-9">
+
+                <h5>
+                    Overall Attendance
+                </h5>
+
+                <div
+                    class="progress"
+                    style="height: 30px;">
+
+                    <div
+                        class="progress-bar
+                        {% if percentage >= 75 %}
+                            bg-success
+                        {% elif percentage >= 50 %}
+                            bg-warning
+                        {% else %}
+                            bg-danger
+                        {% endif %}"
+                        role="progressbar"
+                        style="width: {{ percentage }}%;">
+
+                        {{ percentage }}%
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 text-center">
+
+                <h1 class="mb-0">
+                    {{ percentage }}%
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Overall Attendance
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     REPORTS
+===================================================== -->
+
+<div class="card shadow-sm border-0 mb-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Attendance Reports
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-3 mb-2">
+
+                <a
+                    href="{% url 'attendance:attendance_list' %}"
+                    class="btn btn-outline-primary w-100">
+
+                    Attendance List
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-3 mb-2">
+
+                <a
+                    href="{% url 'attendance:attendance_report' %}"
+                    class="btn btn-outline-success w-100">
+
+                    Daily Report
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-3 mb-2">
+
+                <a
+                    href="{% url 'attendance:student_attendance_report' %}"
+                    class="btn btn-outline-info w-100">
+
+                    Student Report
+
+                </a>
+
+            </div>
+
+
+            <div class="col-md-3 mb-2">
+
+                <a
+                    href="{% url 'attendance:monthly_attendance_report' %}"
+                    class="btn btn-outline-dark w-100">
+
+                    Monthly Report
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CLASS-WISE ATTENDANCE
+===================================================== -->
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+            Class-wise Attendance
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table
+                class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            Class
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Present
+                        </th>
+
+                        <th>
+                            Absent
+                        </th>
+
+                        <th>
+                            Leave
+                        </th>
+
+                        <th>
+                            Attendance %
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for item in class_summary %}
+
+                    <tr>
+
+                        <td>
+                            {{ forloop.counter }}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                {{ item.classroom }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+                            {{ item.total }}
+                        </td>
+
+
+                        <td class="text-success fw-bold">
+                            {{ item.present }}
+                        </td>
+
+
+                        <td class="text-danger fw-bold">
+                            {{ item.absent }}
+                        </td>
+
+
+                        <td class="text-warning fw-bold">
+                            {{ item.leave }}
+                        </td>
+
+
+                        <td style="min-width: 160px;">
+
+                            {% if item.percentage >= 75 %}
+
+                                <span class="badge bg-success mb-1">
+                                    {{ item.percentage }}%
+                                </span>
+
+                                <div
+                                    class="progress"
+                                    style="height: 8px;">
+
+                                    <div
+                                        class="progress-bar bg-success"
+                                        style="width: {{ item.percentage }}%;">
+                                    </div>
+
+                                </div>
+
+
+                            {% elif item.percentage >= 50 %}
+
+                                <span class="badge bg-warning text-dark mb-1">
+                                    {{ item.percentage }}%
+                                </span>
+
+                                <div
+                                    class="progress"
+                                    style="height: 8px;">
+
+                                    <div
+                                        class="progress-bar bg-warning"
+                                        style="width: {{ item.percentage }}%;">
+                                    </div>
+
+                                </div>
+
+
+                            {% else %}
+
+                                <span class="badge bg-danger mb-1">
+                                    {{ item.percentage }}%
+                                </span>
+
+                                <div
+                                    class="progress"
+                                    style="height: 8px;">
+
+                                    <div
+                                        class="progress-bar bg-danger"
+                                        style="width: {{ item.percentage }}%;">
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center py-4">
+
+                            <div class="text-muted">
+
+                                No attendance records found.
+
+                            </div>
+
+                            <a
+                                href="{% url 'attendance:add_attendance' %}"
+                                class="btn btn-primary btn-sm mt-2">
+
+                                + Mark First Attendance
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

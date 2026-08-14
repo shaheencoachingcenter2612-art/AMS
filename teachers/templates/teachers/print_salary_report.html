@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        Salary Report
+    </title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            margin: 3px;
+            color: #555;
+        }
+
+        .summary {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            border: 1px solid #333;
+            padding: 12px;
+            flex: 1;
+        }
+
+        .box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 7px;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .print-button {
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        @media print {
+
+            .print-button {
+                display: none;
+            }
+
+            body {
+                margin: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<button
+    class="print-button"
+    onclick="window.print()"
+>
+    🖨 Print
+</button>
+
+
+<div class="header">
+
+    <h1>
+        Salary Report
+    </h1>
+
+    <p>
+        Teacher Salary Records
+    </p>
+
+    {% if month %}
+        <p>
+            Month: {{ month }}
+        </p>
+    {% endif %}
+
+    {% if year %}
+        <p>
+            Year: {{ year }}
+        </p>
+    {% endif %}
+
+    {% if paid == "true" %}
+        <p>
+            Status: Paid
+        </p>
+    {% elif paid == "false" %}
+        <p>
+            Status: Unpaid
+        </p>
+    {% endif %}
+
+</div>
+
+
+<div class="summary">
+
+    <div class="box">
+
+        <strong>
+            Total Salary
+        </strong>
+
+        Rs. {{ total_salary }}
+
+    </div>
+
+
+    <div class="box">
+
+        <strong>
+            Basic Salary
+        </strong>
+
+        Rs. {{ total_basic }}
+
+    </div>
+
+
+    <div class="box">
+
+        <strong>
+            Allowance
+        </strong>
+
+        Rs. {{ total_allowance }}
+
+    </div>
+
+
+    <div class="box">
+
+        <strong>
+            Advance
+        </strong>
+
+        Rs. {{ total_advance }}
+
+    </div>
+
+
+    <div class="box">
+
+        <strong>
+            Deduction
+        </strong>
+
+        Rs. {{ total_deduction }}
+
+    </div>
+
+</div>
+
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>#</th>
+
+            <th>Teacher</th>
+
+            <th>Employee ID</th>
+
+            <th>Month</th>
+
+            <th>Year</th>
+
+            <th>Basic</th>
+
+            <th>Allowance</th>
+
+            <th>Advance</th>
+
+            <th>Deduction</th>
+
+            <th>Net Salary</th>
+
+            <th>Status</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+    {% for salary in salaries %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+            <td>
+                {{ salary.teacher.first_name }}
+                {{ salary.teacher.last_name }}
+            </td>
+
+            <td>
+                {{ salary.teacher.employee_id }}
+            </td>
+
+            <td>
+                {{ salary.month }}
+            </td>
+
+            <td>
+                {{ salary.year }}
+            </td>
+
+            <td>
+                Rs. {{ salary.basic_salary }}
+            </td>
+
+            <td>
+                Rs. {{ salary.allowance }}
+            </td>
+
+            <td>
+                Rs. {{ salary.advance }}
+            </td>
+
+            <td>
+                Rs. {{ salary.deduction }}
+            </td>
+
+            <td>
+                <strong>
+                    Rs. {{ salary.net_salary }}
+                </strong>
+            </td>
+
+            <td>
+
+                {% if salary.paid %}
+
+                    <strong style="color:green;">
+                        Paid
+                    </strong>
+
+                {% else %}
+
+                    <strong style="color:red;">
+                        Pending
+                    </strong>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td
+                colspan="11"
+                style="text-align:center;"
+            >
+                No salary records found.
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+</body>
+
+</html>

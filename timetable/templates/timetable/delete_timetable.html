@@ -1,0 +1,88 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Delete Timetable
+{% endblock %}
+
+{% block content %}
+
+<div class="card shadow">
+
+    <div class="card-header bg-danger text-white">
+
+        <h3 class="mb-0">
+            Delete Timetable
+        </h3>
+
+    </div>
+
+    <div class="card-body">
+
+        <p class="lead">
+            Are you sure you want to delete this timetable entry?
+        </p>
+
+        <div class="alert alert-warning">
+
+            <strong>Day:</strong>
+            {{ timetable.day }}
+
+            <br>
+
+            <strong>Teacher:</strong>
+            {{ timetable.teacher }}
+
+            <br>
+
+            <strong>Class:</strong>
+            {{ timetable.classroom }}
+
+            <br>
+
+            <strong>Section:</strong>
+            {{ timetable.section }}
+
+            <br>
+
+            <strong>Subject:</strong>
+            {{ timetable.subject }}
+
+            <br>
+
+            <strong>Start Time:</strong>
+            {{ timetable.start_time }}
+
+            <br>
+
+            <strong>End Time:</strong>
+            {{ timetable.end_time }}
+
+        </div>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn btn-danger">
+
+                Yes, Delete
+
+            </button>
+
+            <a
+                href="{% url 'timetable:timetable_detail' timetable.pk %}"
+                class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

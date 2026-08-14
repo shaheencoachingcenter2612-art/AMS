@@ -1,0 +1,330 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="mb-1">Teacher Dashboard</h2>
+        <p class="text-muted mb-0">
+            Teacher management overview
+        </p>
+    </div>
+
+    <a href="{% url 'teachers:add_teacher' %}"
+       class="btn btn-primary">
+        + Add Teacher
+    </a>
+
+</div>
+
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-4 col-lg-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Teachers
+                </h6>
+
+                <h2 class="mb-0">
+                    {{ total_teachers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4 col-lg-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Active Teachers
+                </h6>
+
+                <h2 class="text-success mb-0">
+                    {{ active_teachers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4 col-lg-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Inactive Teachers
+                </h6>
+
+                <h2 class="text-danger mb-0">
+                    {{ inactive_teachers }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4 col-lg-3">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Monthly Salary
+                </h6>
+
+                <h2 class="mb-0">
+                    Rs. {{ total_salary }}
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GENDER STATISTICS
+===================================================== -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    Gender Distribution
+                </h5>
+
+                <hr>
+
+                <div class="d-flex justify-content-between">
+
+                    <span>
+                        Male Teachers
+                    </span>
+
+                    <strong>
+                        {{ male_teachers }}
+                    </strong>
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-2">
+
+                    <span>
+                        Female Teachers
+                    </span>
+
+                    <strong>
+                        {{ female_teachers }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SUBJECT SUMMARY
+    ================================================= -->
+
+    <div class="col-md-6">
+
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body">
+
+                <h5>
+                    Subject-wise Teachers
+                </h5>
+
+                <hr>
+
+                {% for item in subject_summary %}
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span>
+                            {{ item.subject }}
+                        </span>
+
+                        <strong>
+                            {{ item.total }}
+                        </strong>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="text-muted">
+                        No teacher data available.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT TEACHERS
+===================================================== -->
+
+<div class="card shadow-sm border-0">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <h5 class="mb-0">
+                Recently Added Teachers
+            </h5>
+
+            <a href="{% url 'teachers:teacher_list' %}"
+               class="btn btn-sm btn-outline-primary">
+                View All
+            </a>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>
+                            Employee ID
+                        </th>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Subject
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for teacher in recent_teachers %}
+
+                    <tr>
+
+                        <td>
+                            {{ teacher.employee_id }}
+                        </td>
+
+                        <td>
+                            {{ teacher.first_name }}
+                            {{ teacher.last_name }}
+                        </td>
+
+                        <td>
+                            {{ teacher.subject }}
+                        </td>
+
+                        <td>
+                            {{ teacher.status }}
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{% url 'teachers:teacher_detail' pk=teacher.pk %}"
+                                class="btn btn-sm btn-info"
+                            >
+                                View
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% empty %}
+
+                    <tr>
+
+                        <td colspan="5"
+                            class="text-center py-4">
+
+                            No teachers found.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

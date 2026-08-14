@@ -1,0 +1,210 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Salary Detail
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2>Salary Detail</h2>
+
+    <div>
+
+        <a
+            href="{% url 'teachers:edit_salary' salary.pk %}"
+            class="btn btn-warning">
+            Edit
+        </a>
+
+        <a
+            href="{% url 'teachers:salary_list' %}"
+            class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="card shadow-sm">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            Teacher Salary Information
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row">
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Employee ID</strong>
+
+                <div>
+                    {{ salary.teacher.employee_id }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Teacher Name</strong>
+
+                <div>
+                    {{ salary.teacher.first_name }}
+                    {{ salary.teacher.last_name }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Subject</strong>
+
+                <div>
+                    {{ salary.teacher.subject }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Salary Month</strong>
+
+                <div>
+                    {{ salary.month|date:"F Y" }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <strong>Basic Salary</strong>
+
+                <div>
+                    Rs. {{ salary.basic_salary }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <strong>Allowance</strong>
+
+                <div>
+                    Rs. {{ salary.allowance }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <strong>Deduction</strong>
+
+                <div>
+                    Rs. {{ salary.deduction }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Net Salary</strong>
+
+                <div class="fs-4 fw-bold">
+                    Rs. {{ salary.net_salary }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Payment Status</strong>
+
+                <div>
+
+                    {% if salary.payment_status == "Paid" %}
+
+                        <span class="badge bg-success">
+                            Paid
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark">
+                            Pending
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Payment Date</strong>
+
+                <div>
+
+                    {% if salary.payment_date %}
+                        {{ salary.payment_date|date:"d M Y" }}
+                    {% else %}
+                        Not Paid
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <strong>Created</strong>
+
+                <div>
+                    {{ salary.created_at|date:"d M Y, h:i A" }}
+                </div>
+
+            </div>
+
+
+            <div class="col-md-12 mb-3">
+
+                <strong>Remarks</strong>
+
+                <div>
+                    {% if salary.remarks %}
+                        {{ salary.remarks }}
+                    {% else %}
+                        No remarks
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
