@@ -6,239 +6,524 @@
 
 {% block content %}
 
-<div class="container py-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
 
-        <div>
-            <h2 class="mb-1">
-                {% if edit_mode %}
-                    Edit Teacher
-                {% else %}
-                    Add Teacher
-                {% endif %}
-            </h2>
+        <h2 class="mb-1">
 
-            <p class="text-muted mb-0">
-                {% if edit_mode %}
-                    Update teacher information
-                {% else %}
-                    Enter teacher information
-                {% endif %}
-            </p>
-        </div>
+            {% if edit_mode %}
+                Edit Teacher
+            {% else %}
+                Add Teacher
+            {% endif %}
 
-        <a href="{% url 'teachers:teacher_list' %}"
-           class="btn btn-secondary">
-            Back to Teachers
-        </a>
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            {% if edit_mode %}
+                Update teacher information and login account
+            {% else %}
+                Enter teacher information and create login account
+            {% endif %}
+
+        </p>
 
     </div>
 
-    <div class="card shadow-sm">
+    <a href="{% url 'teachers:teacher_list' %}"
+       class="btn btn-secondary">
 
-        <div class="card-body">
+        Back to Teachers
 
-            <form method="POST" enctype="multipart/form-data">
+    </a>
 
-                {% csrf_token %}
+</div>
 
-                {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
 
-                <div class="row g-3">
+<div class="card shadow-sm">
 
-                    <!-- Employee ID -->
-                    <div class="col-md-6">
-                        <label class="form-label">Employee ID</label>
-                        {{ form.employee_id }}
+    <div class="card-body">
 
-                        {% for error in form.employee_id.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
+        <form method="POST"
+              enctype="multipart/form-data">
 
-                        <small class="text-muted">
-                            Leave blank for automatic Employee ID.
-                        </small>
-                    </div>
+            {% csrf_token %}
 
-                    <!-- First Name -->
-                    <div class="col-md-6">
-                        <label class="form-label">First Name *</label>
-                        {{ form.first_name }}
 
-                        {% for error in form.first_name.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+            {% if form.non_field_errors %}
 
-                    <!-- Last Name -->
-                    <div class="col-md-6">
-                        <label class="form-label">Last Name</label>
-                        {{ form.last_name }}
+                <div class="alert alert-danger">
 
-                        {% for error in form.last_name.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                    {{ form.non_field_errors }}
 
-                    <!-- Father Name -->
-                    <div class="col-md-6">
-                        <label class="form-label">Father Name *</label>
-                        {{ form.father_name }}
+                </div>
 
-                        {% for error in form.father_name.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+            {% endif %}
 
-                    <!-- Photo -->
-                    <div class="col-md-6">
-                        <label class="form-label">Teacher Photo</label>
-                        {{ form.photo }}
 
-                        {% for error in form.photo.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+            <!-- =================================================
+                 LOGIN ACCOUNT
+            ================================================== -->
 
-                    <!-- Gender -->
-                    <div class="col-md-6">
-                        <label class="form-label">Gender *</label>
-                        {{ form.gender }}
+            <div class="card border-primary mb-4">
 
-                        {% for error in form.gender.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                <div class="card-header bg-primary text-white">
 
-                    <!-- Date of Birth -->
-                    <div class="col-md-6">
-                        <label class="form-label">Date of Birth *</label>
-                        {{ form.date_of_birth }}
+                    <h5 class="mb-0">
+                        Teacher Login Account
+                    </h5>
 
-                        {% for error in form.date_of_birth.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                </div>
 
-                    <!-- Phone -->
-                    <div class="col-md-6">
-                        <label class="form-label">Phone *</label>
-                        {{ form.phone }}
+                <div class="card-body">
 
-                        {% for error in form.phone.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                    <div class="row g-3">
 
-                    <!-- Email -->
-                    <div class="col-md-6">
-                        <label class="form-label">Email</label>
-                        {{ form.email }}
+                        <!-- Username -->
 
-                        {% for error in form.email.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                        <div class="col-md-6">
 
-                    <!-- CNIC -->
-                    <div class="col-md-6">
-                        <label class="form-label">CNIC *</label>
-                        {{ form.cnic }}
+                            <label class="form-label">
+                                Username
+                            </label>
 
-                        {% for error in form.cnic.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                            {{ form.username }}
 
-                    <!-- Qualification -->
-                    <div class="col-md-6">
-                        <label class="form-label">Qualification *</label>
-                        {{ form.qualification }}
+                            {% for error in form.username.errors %}
 
-                        {% for error in form.qualification.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
 
-                    <!-- Subject -->
-                    <div class="col-md-6">
-                        <label class="form-label">Subject *</label>
-                        {{ form.subject }}
+                            {% endfor %}
 
-                        {% for error in form.subject.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                            <small class="text-muted">
+                                Teacher will use this username to login.
+                            </small>
 
-                    <!-- Salary -->
-                    <div class="col-md-6">
-                        <label class="form-label">Monthly Salary *</label>
-                        {{ form.salary }}
+                        </div>
 
-                        {% for error in form.salary.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
 
-                    <!-- Joining Date -->
-                    <div class="col-md-6">
-                        <label class="form-label">Joining Date *</label>
-                        {{ form.joining_date }}
+                        <!-- Password -->
 
-                        {% for error in form.joining_date.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                        <div class="col-md-6">
 
-                    <!-- Status -->
-                    <div class="col-md-6">
-                        <label class="form-label">Status</label>
-                        {{ form.status }}
+                            <label class="form-label">
+                                Password
+                            </label>
 
-                        {% for error in form.status.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                            {{ form.password }}
 
-                    <!-- Address -->
-                    <div class="col-12">
-                        <label class="form-label">Complete Address *</label>
-                        {{ form.address }}
+                            {% for error in form.password.errors %}
 
-                        {% for error in form.address.errors %}
-                            <div class="text-danger small">{{ error }}</div>
-                        {% endfor %}
+                                <div class="text-danger small">
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                            {% if edit_mode %}
+
+                                <small class="text-muted">
+                                    Leave blank to keep the existing password.
+                                </small>
+
+                            {% else %}
+
+                                <small class="text-muted">
+                                    Set a password for the teacher.
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
                     </div>
 
                 </div>
 
-                <hr class="my-4">
+            </div>
 
-                <div class="d-flex gap-2">
 
-                    <button type="submit" class="btn btn-primary">
-                        {% if edit_mode %}
-                            Update Teacher
-                        {% else %}
-                            Save Teacher
-                        {% endif %}
-                    </button>
+            <!-- =================================================
+                 TEACHER INFORMATION
+            ================================================== -->
 
-                    <a href="{% url 'teachers:teacher_list' %}"
-                       class="btn btn-outline-secondary">
-                        Cancel
-                    </a>
+            <div class="row g-3">
+
+
+                <!-- Employee ID -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Employee ID
+                    </label>
+
+                    {{ form.employee_id }}
+
+                    {% for error in form.employee_id.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                    <small class="text-muted">
+                        Leave blank for automatic Employee ID.
+                    </small>
 
                 </div>
 
-            </form>
 
-        </div>
+                <!-- First Name -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        First Name *
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {% for error in form.first_name.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Last Name -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Last Name
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {% for error in form.last_name.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Father Name -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Father Name *
+                    </label>
+
+                    {{ form.father_name }}
+
+                    {% for error in form.father_name.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Photo -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Teacher Photo
+                    </label>
+
+                    {{ form.photo }}
+
+                    {% for error in form.photo.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Gender -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Gender *
+                    </label>
+
+                    {{ form.gender }}
+
+                    {% for error in form.gender.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Date of Birth -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Date of Birth *
+                    </label>
+
+                    {{ form.date_of_birth }}
+
+                    {% for error in form.date_of_birth.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Phone *
+                    </label>
+
+                    {{ form.phone }}
+
+                    {% for error in form.phone.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    {{ form.email }}
+
+                    {% for error in form.email.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- CNIC -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        CNIC *
+                    </label>
+
+                    {{ form.cnic }}
+
+                    {% for error in form.cnic.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Qualification -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Qualification *
+                    </label>
+
+                    {{ form.qualification }}
+
+                    {% for error in form.qualification.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Subject -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Subject *
+                    </label>
+
+                    {{ form.subject }}
+
+                    {% for error in form.subject.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Salary -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Monthly Salary *
+                    </label>
+
+                    {{ form.salary }}
+
+                    {% for error in form.salary.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Joining Date -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Joining Date *
+                    </label>
+
+                    {{ form.joining_date }}
+
+                    {% for error in form.joining_date.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    {{ form.status }}
+
+                    {% for error in form.status.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="col-12">
+
+                    <label class="form-label">
+                        Complete Address *
+                    </label>
+
+                    {{ form.address }}
+
+                    {% for error in form.address.errors %}
+
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4">
+
+
+            <div class="d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    {% if edit_mode %}
+                        Update Teacher
+                    {% else %}
+                        Save Teacher & Create Login
+                    {% endif %}
+
+                </button>
+
+
+                <a href="{% url 'teachers:teacher_list' %}"
+                   class="btn btn-outline-secondary">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+
+        </form>
 
     </div>
 

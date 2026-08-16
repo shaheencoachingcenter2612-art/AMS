@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 
@@ -8,13 +9,29 @@ app_name = "attendance"
 urlpatterns = [
 
     # =====================================================
-    # ATTENDANCE HOME / DASHBOARD
+    # ATTENDANCE DASHBOARD
     # =====================================================
 
     path(
         "",
         views.attendance_dashboard,
         name="attendance_home",
+    ),
+
+    path(
+        "dashboard/",
+        views.attendance_dashboard,
+        name="attendance_dashboard",
+    ),
+
+    # =====================================================
+    # DAILY BULK ATTENDANCE
+    # =====================================================
+
+    path(
+        "mark/",
+        views.mark_attendance,
+        name="mark_attendance",
     ),
 
     # =====================================================
@@ -28,7 +45,7 @@ urlpatterns = [
     ),
 
     # =====================================================
-    # ADD ATTENDANCE
+    # SINGLE ATTENDANCE
     # =====================================================
 
     path(
@@ -37,18 +54,26 @@ urlpatterns = [
         name="add_attendance",
     ),
 
-    # =====================================================
-    # ATTENDANCE DASHBOARD
-    # =====================================================
+    path(
+        "<int:pk>/",
+        views.attendance_detail,
+        name="attendance_detail",
+    ),
 
     path(
-        "dashboard/",
-        views.attendance_dashboard,
-        name="attendance_dashboard",
+        "<int:pk>/edit/",
+        views.edit_attendance,
+        name="edit_attendance",
+    ),
+
+    path(
+        "<int:pk>/delete/",
+        views.delete_attendance,
+        name="delete_attendance",
     ),
 
     # =====================================================
-    # ATTENDANCE REPORTS
+    # REPORTS
     # =====================================================
 
     path(
@@ -67,35 +92,5 @@ urlpatterns = [
         "monthly-report/",
         views.monthly_attendance_report,
         name="monthly_attendance_report",
-    ),
-
-    # =====================================================
-    # ATTENDANCE DETAIL
-    # =====================================================
-
-    path(
-        "<int:pk>/",
-        views.attendance_detail,
-        name="attendance_detail",
-    ),
-
-    # =====================================================
-    # EDIT ATTENDANCE
-    # =====================================================
-
-    path(
-        "<int:pk>/edit/",
-        views.edit_attendance,
-        name="edit_attendance",
-    ),
-
-    # =====================================================
-    # DELETE ATTENDANCE
-    # =====================================================
-
-    path(
-        "<int:pk>/delete/",
-        views.delete_attendance,
-        name="delete_attendance",
     ),
 ]

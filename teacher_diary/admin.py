@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import DiaryEntry
 
 
@@ -14,23 +15,24 @@ class DiaryEntryAdmin(admin.ModelAdmin):
         "topic",
     )
 
-
     list_filter = (
         "date",
         "teacher",
-        "classroom",
         "subject",
+        "classroom",
+        "section",
     )
-
 
     search_fields = (
         "teacher__first_name",
         "teacher__last_name",
+        "teacher__employee_id",
         "subject",
         "topic",
+        "description",
     )
-
 
     ordering = (
         "-date",
+        "-id",
     )

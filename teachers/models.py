@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import datetime
 
 
@@ -17,6 +18,22 @@ class Teacher(models.Model):
         ("Active", "Active"),
         ("Inactive", "Inactive"),
     ]
+
+    # =====================================================
+    # USER ACCOUNT LINK
+    # =====================================================
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="teacher_profile",
+        blank=True,
+        null=True,
+    )
+
+    # =====================================================
+    # BASIC INFORMATION
+    # =====================================================
 
     employee_id = models.CharField(
         max_length=20,
@@ -88,9 +105,17 @@ class Teacher(models.Model):
         default="Active",
     )
 
+    # =====================================================
+    # TIMESTAMPS
+    # =====================================================
+
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+
+    # =====================================================
+    # AUTO EMPLOYEE ID
+    # =====================================================
 
     def save(self, *args, **kwargs):
 
@@ -123,6 +148,10 @@ class Teacher(models.Model):
             )
 
         super().save(*args, **kwargs)
+
+    # =====================================================
+    # STRING
+    # =====================================================
 
     def __str__(self):
 

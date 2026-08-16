@@ -5,7 +5,6 @@ from .models import DiaryEntry
 from .forms import DiaryEntryForm
 
 from teachers.models import Teacher
-from academics.models import ClassRoom, Section
 
 
 # =========================================================
@@ -48,17 +47,31 @@ def add_diary(request):
 
 def diary_list(request):
 
-    query = request.GET.get("q", "")
-    teacher_id = request.GET.get("teacher", "")
-    date = request.GET.get("date", "")
-    classroom_id = request.GET.get("classroom", "")
-    section_id = request.GET.get("section", "")
+    query = request.GET.get(
+        "q",
+        ""
+    ).strip()
+
+    teacher_id = request.GET.get(
+        "teacher",
+        ""
+    ).strip()
+
+    date = request.GET.get(
+        "date",
+        ""
+    ).strip()
 
     diaries = DiaryEntry.objects.select_related(
         "teacher",
         "classroom",
         "section",
     )
+
+
+    # =====================================================
+    # SEARCH
+    # =====================================================
 
     if query:
 
@@ -67,10 +80,23 @@ def diary_list(request):
             |
             Q(teacher__last_name__icontains=query)
             |
+            Q(teacher__employee_id__icontains=query)
+            |
+            Q(classroom__name__icontains=query)
+            |
+            Q(section__name__icontains=query)
+            |
             Q(subject__icontains=query)
             |
             Q(topic__icontains=query)
+            |
+            Q(description__icontains=query)
         )
+
+
+    # =====================================================
+    # TEACHER FILTER
+    # =====================================================
 
     if teacher_id:
 
@@ -78,62 +104,49 @@ def diary_list(request):
             teacher_id=teacher_id
         )
 
+
+    # =====================================================
+    # DATE FILTER
+    # =====================================================
+
     if date:
 
         diaries = diaries.filter(
             date=date
         )
 
-    if classroom_id:
 
-        diaries = diaries.filter(
-            classroom_id=classroom_id
-        )
-
-    if section_id:
-
-        diaries = diaries.filter(
-            section_id=section_id
-        )
+    # =====================================================
+    # ORDERING
+    # =====================================================
 
     diaries = diaries.order_by(
         "-date",
-        "-id"
+        "-id",
     )
 
-    teachers_list = Teacher.objects.all().order_by(
-        "first_name"
+
+    # =====================================================
+    # ACTIVE TEACHERS
+    # =====================================================
+
+    teachers_list = Teacher.objects.filter(
+        status="Active"
+    ).order_by(
+        "first_name",
+        "last_name",
     )
 
-    classrooms = ClassRoom.objects.all().order_by(
-        "name"
-    )
-
-    sections = Section.objects.all().order_by(
-        "name"
-    )
 
     return render(
         request,
         "teacher_diary/diary_list.html",
         {
             "diaries": diaries,
-
             "query": query,
-
             "teacher_id": teacher_id,
-
             "date": date,
-
-            "classroom_id": classroom_id,
-
-            "section_id": section_id,
-
             "teachers_list": teachers_list,
-
-            "classrooms": classrooms,
-
-            "sections": sections,
         }
     )
 
@@ -153,7 +166,7 @@ def diary_detail(request, pk):
         request,
         "teacher_diary/diary_detail.html",
         {
-            "diary": diary
+            "diary": diary,
         }
     )
 
@@ -168,6 +181,7 @@ def edit_diary(request, pk):
         DiaryEntry,
         pk=pk
     )
+
 
     if request.method == "POST":
 
@@ -191,14 +205,13 @@ def edit_diary(request, pk):
             instance=diary
         )
 
+
     return render(
         request,
         "teacher_diary/add_diary.html",
         {
             "form": form,
-
             "diary": diary,
-
             "edit_mode": True,
         }
     )
@@ -215,6 +228,7 @@ def delete_diary(request, pk):
         pk=pk
     )
 
+
     if request.method == "POST":
 
         diary.delete()
@@ -223,11 +237,12 @@ def delete_diary(request, pk):
             "teacher_diary:diary_list"
         )
 
+
     return render(
         request,
         "teacher_diary/delete_diary.html",
         {
-            "diary": diary
+            "diary": diary,
         }
     )
 
@@ -238,33 +253,32 @@ def delete_diary(request, pk):
 
 def print_diary(request):
 
-    query = request.GET.get("q", "")
+    query = request.GET.get(
+        "q",
+        ""
+    ).strip()
 
     teacher_id = request.GET.get(
         "teacher",
         ""
-    )
+    ).strip()
 
     date = request.GET.get(
         "date",
         ""
-    )
+    ).strip()
 
-    classroom_id = request.GET.get(
-        "classroom",
-        ""
-    )
-
-    section_id = request.GET.get(
-        "section",
-        ""
-    )
 
     diaries = DiaryEntry.objects.select_related(
         "teacher",
         "classroom",
         "section",
     )
+
+
+    # =====================================================
+    # SEARCH
+    # =====================================================
 
     if query:
 
@@ -273,10 +287,23 @@ def print_diary(request):
             |
             Q(teacher__last_name__icontains=query)
             |
+            Q(teacher__employee_id__icontains=query)
+            |
+            Q(classroom__name__icontains=query)
+            |
+            Q(section__name__icontains=query)
+            |
             Q(subject__icontains=query)
             |
             Q(topic__icontains=query)
+            |
+            Q(description__icontains=query)
         )
+
+
+    # =====================================================
+    # TEACHER FILTER
+    # =====================================================
 
     if teacher_id:
 
@@ -284,43 +311,35 @@ def print_diary(request):
             teacher_id=teacher_id
         )
 
+
+    # =====================================================
+    # DATE FILTER
+    # =====================================================
+
     if date:
 
         diaries = diaries.filter(
             date=date
         )
 
-    if classroom_id:
 
-        diaries = diaries.filter(
-            classroom_id=classroom_id
-        )
-
-    if section_id:
-
-        diaries = diaries.filter(
-            section_id=section_id
-        )
+    # =====================================================
+    # ORDERING
+    # =====================================================
 
     diaries = diaries.order_by(
         "-date",
-        "-id"
+        "-id",
     )
+
 
     return render(
         request,
         "teacher_diary/print_diary.html",
         {
             "diaries": diaries,
-
             "query": query,
-
             "teacher_id": teacher_id,
-
             "date": date,
-
-            "classroom_id": classroom_id,
-
-            "section_id": section_id,
         }
     )

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 
 from .models import Teacher
 from salary.models import Salary
@@ -9,6 +10,30 @@ from salary.models import Salary
 # =========================================================
 
 class TeacherForm(forms.ModelForm):
+
+    # =====================================================
+    # LOGIN ACCOUNT FIELDS
+    # =====================================================
+
+    username = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Teacher Username",
+            }
+        )
+    )
+
+    password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Teacher Password",
+            }
+        )
+    )
 
     class Meta:
 
@@ -146,6 +171,99 @@ class TeacherForm(forms.ModelForm):
                 }
             ),
         }
+
+    # =====================================================
+    # VALIDATION
+    # =====================================================
+
+    def clean_username(self):
+
+        username = self.cleaned_data.get("username", "").strip()
+
+        if not username:
+            return username
+
+        queryset = User.objects.filter(
+            username=username
+        )
+
+        # When editing, allow the teacher's existing username
+        if self.instance.pk and self.instance.user:
+
+            queryset = queryset.exclude(
+                pk=self.instance.user.pk
+            )
+
+        if queryset.exists():
+
+            raise forms.ValidationError(
+                "This username is already in use."
+            )
+
+        return username
+
+    # =====================================================
+    # SAVE
+    # =====================================================
+
+    def save(self, commit=True):
+
+        teacher = super().save(commit=False)
+
+        username = self.cleaned_data.get(
+            "username",
+            ""
+        ).strip()
+
+        password = self.cleaned_data.get(
+            "password",
+            ""
+        )
+
+        # -------------------------------------------------
+        # CREATE NEW USER ACCOUNT
+        # -------------------------------------------------
+
+        if not teacher.user and username and password:
+
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                first_name=teacher.first_name,
+                last_name=teacher.last_name,
+                email=teacher.email or "",
+            )
+
+            teacher.user = user
+
+        # -------------------------------------------------
+        # UPDATE EXISTING USER
+        # -------------------------------------------------
+
+        elif teacher.user:
+
+            user = teacher.user
+
+            user.first_name = teacher.first_name
+            user.last_name = teacher.last_name
+            user.email = teacher.email or ""
+
+            if password:
+                user.set_password(password)
+
+            if username:
+                user.username = username
+
+            user.save()
+
+        # -------------------------------------------------
+        # SAVE TEACHER
+        # -------------------------------------------------
+
+        if commit:
+            teacher.save()
+
+        return teacher
 
 
 # =========================================================

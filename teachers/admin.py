@@ -19,6 +19,7 @@ class TeacherAdmin(admin.ModelAdmin):
         "phone",
         "salary",
         "status",
+        "user",
     )
 
     list_filter = (
@@ -31,11 +32,16 @@ class TeacherAdmin(admin.ModelAdmin):
         "employee_id",
         "first_name",
         "last_name",
+        "father_name",
         "phone",
         "cnic",
         "subject",
+        "qualification",
     )
 
     ordering = (
         "first_name",
+        "last_name",
     )
+
+    list_per_page = 25

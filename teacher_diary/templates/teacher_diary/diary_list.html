@@ -37,6 +37,10 @@
             border-radius: 12px;
         }
 
+        .topic-cell {
+            max-width: 250px;
+        }
+
     </style>
 
 </head>
@@ -45,11 +49,13 @@
 <body>
 
 
+<!-- ===================================================== -->
 <!-- NAVBAR -->
+<!-- ===================================================== -->
 
 <nav class="navbar navbar-dark bg-primary">
 
-    <div class="container">
+    <div class="container-fluid px-4">
 
         <a class="navbar-brand fw-bold"
            href="/">
@@ -57,6 +63,7 @@
             SHAHEEN COACHING CENTER ERP
 
         </a>
+
 
         <a href="{% url 'teacher_diary:add_diary' %}"
            class="btn btn-light">
@@ -74,7 +81,9 @@
 <div class="container-fluid py-4">
 
 
+    <!-- ================================================= -->
     <!-- PAGE HEADER -->
+    <!-- ================================================= -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
@@ -94,7 +103,7 @@
         <div class="d-flex gap-2">
 
             <a
-                href="{% url 'teacher_diary:print_diary' %}?q={{ query }}&teacher={{ teacher_id }}&date={{ date }}&classroom={{ classroom_id }}&section={{ section_id }}"
+                href="{% url 'teacher_diary:print_diary' %}?q={{ query }}&teacher={{ teacher_id }}&date={{ date }}"
                 target="_blank"
                 class="btn btn-dark">
 
@@ -117,10 +126,11 @@
 
 
 
+    <!-- ================================================= -->
     <!-- SEARCH / FILTER -->
+    <!-- ================================================= -->
 
     <div class="card filter-card shadow-sm mb-4">
-
 
         <div class="card-header bg-dark text-white">
 
@@ -133,16 +143,14 @@
 
         <div class="card-body">
 
-
             <form method="GET">
-
 
                 <div class="row g-3">
 
 
                     <!-- SEARCH -->
 
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-5 col-md-6">
 
                         <label class="form-label fw-semibold">
                             Search
@@ -153,14 +161,14 @@
                             name="q"
                             value="{{ query }}"
                             class="form-control"
-                            placeholder="Teacher, subject or topic">
+                            placeholder="Teacher, employee ID, subject or topic">
 
                     </div>
 
 
                     <!-- TEACHER -->
 
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-lg-3 col-md-6">
 
                         <label class="form-label fw-semibold">
                             Teacher
@@ -185,6 +193,10 @@
 
                                     {{ teacher.first_name }}
                                     {{ teacher.last_name }}
+
+                                    {% if teacher.employee_id %}
+                                        — {{ teacher.employee_id }}
+                                    {% endif %}
 
                                 </option>
 
@@ -212,102 +224,30 @@
                     </div>
 
 
-                    <!-- CLASS -->
+                    <!-- BUTTONS -->
 
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-lg-2 col-md-6 d-flex align-items-end gap-2">
 
-                        <label class="form-label fw-semibold">
-                            Class
-                        </label>
+                        <button
+                            type="submit"
+                            class="btn btn-success">
 
-                        <select
-                            name="classroom"
-                            class="form-select">
+                            🔍 Search
 
-                            <option value="">
-                                All Classes
-                            </option>
+                        </button>
 
 
-                            {% for classroom in classrooms %}
+                        <a
+                            href="{% url 'teacher_diary:diary_list' %}"
+                            class="btn btn-outline-secondary">
 
-                                <option
-                                    value="{{ classroom.id }}"
-                                    {% if classroom.id|stringformat:"s" == classroom_id %}
-                                        selected
-                                    {% endif %}>
+                            Reset
 
-                                    {{ classroom }}
-
-                                </option>
-
-                            {% endfor %}
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- SECTION -->
-
-                    <div class="col-lg-2 col-md-6">
-
-                        <label class="form-label fw-semibold">
-                            Section
-                        </label>
-
-                        <select
-                            name="section"
-                            class="form-select">
-
-                            <option value="">
-                                All Sections
-                            </option>
-
-
-                            {% for section in sections %}
-
-                                <option
-                                    value="{{ section.id }}"
-                                    {% if section.id|stringformat:"s" == section_id %}
-                                        selected
-                                    {% endif %}>
-
-                                    {{ section }}
-
-                                </option>
-
-                            {% endfor %}
-
-                        </select>
+                        </a>
 
                     </div>
 
                 </div>
-
-
-
-                <div class="mt-4">
-
-                    <button
-                        type="submit"
-                        class="btn btn-success">
-
-                        🔍 Search / Filter
-
-                    </button>
-
-
-                    <a
-                        href="{% url 'teacher_diary:diary_list' %}"
-                        class="btn btn-outline-secondary">
-
-                        Reset
-
-                    </a>
-
-                </div>
-
 
             </form>
 
@@ -317,7 +257,9 @@
 
 
 
+    <!-- ================================================= -->
     <!-- DIARY ENTRIES -->
+    <!-- ================================================= -->
 
     <div class="card page-card shadow-sm">
 
@@ -336,6 +278,7 @@
             </span>
 
         </div>
+
 
 
         <div class="card-body p-0">
@@ -375,6 +318,7 @@
                     </thead>
 
 
+
                     <tbody>
 
 
@@ -383,10 +327,16 @@
                         <tr>
 
 
+                            <!-- NUMBER -->
+
                             <td>
+
                                 {{ forloop.counter }}
+
                             </td>
 
+
+                            <!-- DATE -->
 
                             <td class="text-nowrap">
 
@@ -394,6 +344,8 @@
 
                             </td>
 
+
+                            <!-- TEACHER -->
 
                             <td>
 
@@ -404,8 +356,21 @@
 
                                 </strong>
 
+
+                                {% if diary.teacher.employee_id %}
+
+                                    <div class="small text-muted">
+
+                                        {{ diary.teacher.employee_id }}
+
+                                    </div>
+
+                                {% endif %}
+
                             </td>
 
+
+                            <!-- CLASS -->
 
                             <td>
 
@@ -414,12 +379,16 @@
                             </td>
 
 
+                            <!-- SECTION -->
+
                             <td>
 
                                 {{ diary.section }}
 
                             </td>
 
+
+                            <!-- SUBJECT -->
 
                             <td>
 
@@ -428,15 +397,18 @@
                             </td>
 
 
-                            <td>
+                            <!-- TOPIC -->
+
+                            <td class="topic-cell">
 
                                 {{ diary.topic }}
 
                             </td>
 
 
-                            <td>
+                            <!-- ACTIONS -->
 
+                            <td>
 
                                 <div class="d-flex gap-1">
 
@@ -470,7 +442,6 @@
 
                                 </div>
 
-
                             </td>
 
 
@@ -488,12 +459,16 @@
 
 
                                 <h5 class="text-muted">
+
                                     No Diary Entries Found
+
                                 </h5>
 
 
                                 <p class="text-muted mb-3">
+
                                     No teaching records match your current filters.
+
                                 </p>
 
 

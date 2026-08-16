@@ -139,6 +139,7 @@ def add_teacher(request):
             )
 
     else:
+
         form = TeacherForm()
 
     return render(
@@ -201,7 +202,7 @@ def edit_teacher(request, pk):
 
             messages.success(
                 request,
-                "Teacher updated successfully."
+                "Teacher information updated successfully."
             )
 
             return redirect(
@@ -278,7 +279,6 @@ def teacher_report(request):
 
     teachers = Teacher.objects.all()
 
-    # SEARCH
     if query:
         teachers = teachers.filter(
             Q(employee_id__icontains=query) |
@@ -289,19 +289,16 @@ def teacher_report(request):
             Q(cnic__icontains=query)
         )
 
-    # GENDER
     if gender:
         teachers = teachers.filter(
             gender=gender
         )
 
-    # STATUS
     if status:
         teachers = teachers.filter(
             status=status
         )
 
-    # SUBJECT
     if subject:
         teachers = teachers.filter(
             subject__icontains=subject
@@ -321,8 +318,12 @@ def teacher_report(request):
             "gender": gender,
             "status": status,
             "subject": subject,
-            "gender_choices": Teacher._meta.get_field("gender").choices,
-            "status_choices": Teacher._meta.get_field("status").choices,
+            "gender_choices": Teacher._meta.get_field(
+                "gender"
+            ).choices,
+            "status_choices": Teacher._meta.get_field(
+                "status"
+            ).choices,
         }
     )
 

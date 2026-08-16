@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class TeacherDiaryConfig(AppConfig):
+class DiaryEntryConfig(AppConfig):
     name = 'teacher_diary'

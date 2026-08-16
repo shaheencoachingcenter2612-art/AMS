@@ -1,12 +1,13 @@
 from django import forms
 
 from .models import Attendance
+from students.models import Student
+from academics.models import Session, ClassRoom, Section
 
 
 class AttendanceForm(forms.ModelForm):
 
     class Meta:
-
         model = Attendance
 
         fields = [
@@ -23,51 +24,50 @@ class AttendanceForm(forms.ModelForm):
 
             "student": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "session": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "classroom": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "section": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "date": forms.DateInput(
                 attrs={
                     "type": "date",
-                    "class": "form-control"
+                    "class": "form-control",
                 }
             ),
 
             "status": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "remarks": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Optional remarks"
+                    "placeholder": "Optional remarks",
                 }
             ),
         }
 
     def clean(self):
-
         cleaned_data = super().clean()
 
         student = cleaned_data.get("student")
@@ -79,7 +79,7 @@ class AttendanceForm(forms.ModelForm):
             existing = Attendance.objects.filter(
                 student=student,
                 session=session,
-                date=date
+                date=date,
             )
 
             if self.instance.pk:
@@ -88,9 +88,50 @@ class AttendanceForm(forms.ModelForm):
                 )
 
             if existing.exists():
-
                 raise forms.ValidationError(
                     "Attendance for this student on this date already exists."
                 )
 
         return cleaned_data
+
+
+class BulkAttendanceFilterForm(forms.Form):
+
+    session = forms.ModelChoiceField(
+        queryset=Session.objects.all(),
+        empty_label="Select Session",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+
+    classroom = forms.ModelChoiceField(
+        queryset=ClassRoom.objects.all(),
+        empty_label="Select Class",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+
+    section = forms.ModelChoiceField(
+        queryset=Section.objects.all(),
+        empty_label="Select Section",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+
+    date = forms.DateField(
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+                "class": "form-control",
+            }
+        )
+    )

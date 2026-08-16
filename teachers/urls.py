@@ -1,7 +1,9 @@
 from django.urls import path
 from . import views
 
+
 app_name = "teachers"
+
 
 urlpatterns = [
 
@@ -14,6 +16,10 @@ urlpatterns = [
         views.teacher_dashboard,
         name="teacher_dashboard",
     ),
+
+    # =====================================================
+    # MY TEACHER PROFILE
+    # =====================================================
 
     # =====================================================
     # TEACHER REPORT

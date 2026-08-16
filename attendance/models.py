@@ -15,25 +15,25 @@ class Attendance(models.Model):
     student = models.ForeignKey(
         Student,
         on_delete=models.CASCADE,
-        related_name="attendance_records"
+        related_name="attendance_records",
     )
 
     session = models.ForeignKey(
         Session,
         on_delete=models.PROTECT,
-        related_name="attendance_records"
+        related_name="attendance_records",
     )
 
     classroom = models.ForeignKey(
         ClassRoom,
         on_delete=models.PROTECT,
-        related_name="attendance_records"
+        related_name="attendance_records",
     )
 
     section = models.ForeignKey(
         Section,
         on_delete=models.PROTECT,
-        related_name="attendance_records"
+        related_name="attendance_records",
     )
 
     date = models.DateField()
@@ -41,20 +41,20 @@ class Attendance(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default="Present"
+        default="Present",
     )
 
     remarks = models.CharField(
         max_length=255,
-        blank=True
+        blank=True,
     )
 
     created_at = models.DateTimeField(
-        auto_now_add=True
+        auto_now_add=True,
     )
 
     updated_at = models.DateTimeField(
-        auto_now=True
+        auto_now=True,
     )
 
     class Meta:
@@ -70,7 +70,7 @@ class Attendance(models.Model):
                     "date",
                     "session",
                 ],
-                name="unique_student_attendance_per_day"
+                name="unique_student_attendance_per_day",
             )
         ]
 

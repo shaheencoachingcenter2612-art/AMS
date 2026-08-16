@@ -1,7 +1,12 @@
 from django import forms
 
 from .models import DiaryEntry
+from teachers.models import Teacher
 
+
+# =========================================================
+# TEACHER DIARY FORM
+# =========================================================
 
 class DiaryEntryForm(forms.ModelForm):
 
@@ -11,7 +16,6 @@ class DiaryEntryForm(forms.ModelForm):
 
         fields = [
             "teacher",
-            "date",
             "classroom",
             "section",
             "subject",
@@ -19,54 +23,48 @@ class DiaryEntryForm(forms.ModelForm):
             "description",
             "homework",
             "remarks",
+            "date",
         ]
 
         widgets = {
 
             "teacher": forms.Select(
                 attrs={
-                    "class": "form-select"
-                }
-            ),
-
-            "date": forms.DateInput(
-                attrs={
-                    "type": "date",
-                    "class": "form-control"
+                    "class": "form-select",
                 }
             ),
 
             "classroom": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "section": forms.Select(
                 attrs={
-                    "class": "form-select"
+                    "class": "form-select",
                 }
             ),
 
             "subject": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Subject"
+                    "placeholder": "Subject",
                 }
             ),
 
             "topic": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Lesson / Topic taught"
+                    "placeholder": "Lesson / Topic taught",
                 }
             ),
 
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
-                    "rows": 4,
-                    "placeholder": "Describe what was taught..."
+                    "rows": 5,
+                    "placeholder": "Describe what was taught...",
                 }
             ),
 
@@ -74,7 +72,7 @@ class DiaryEntryForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 3,
-                    "placeholder": "Homework assigned..."
+                    "placeholder": "Homework assigned...",
                 }
             ),
 
@@ -82,7 +80,30 @@ class DiaryEntryForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "rows": 2,
-                    "placeholder": "Additional remarks..."
+                    "placeholder": "Additional remarks...",
+                }
+            ),
+
+            "date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields["teacher"].queryset = (
+            Teacher.objects
+            .filter(
+                status="Active",
+                user__isnull=False,
+            )
+            .order_by(
+                "first_name",
+                "last_name",
+            )
+        )

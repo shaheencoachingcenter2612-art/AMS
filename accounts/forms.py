@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 
 from .models import UserProfile
+from teachers.models import Teacher
 
 
 class UserCreateForm(forms.ModelForm):
@@ -24,6 +25,23 @@ class UserCreateForm(forms.ModelForm):
         )
     )
 
+    teacher = forms.ModelChoiceField(
+        queryset=Teacher.objects.filter(
+            status="Active",
+            user__isnull=True,
+        ).order_by(
+            "first_name",
+            "last_name",
+        ),
+        required=False,
+        empty_label="Select Teacher",
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        )
+    )
+
     class Meta:
         model = User
 
@@ -35,6 +53,7 @@ class UserCreateForm(forms.ModelForm):
         ]
 
         widgets = {
+
             "username": forms.TextInput(
                 attrs={
                     "class": "form-control",
@@ -64,6 +83,22 @@ class UserCreateForm(forms.ModelForm):
             ),
         }
 
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        role = cleaned_data.get("role")
+        teacher = cleaned_data.get("teacher")
+
+        if role == "Teacher" and not teacher:
+
+            self.add_error(
+                "teacher",
+                "Please select a teacher for this Teacher account."
+            )
+
+        return cleaned_data
+
     def save(self, commit=True):
 
         user = super().save(commit=False)
@@ -73,6 +108,7 @@ class UserCreateForm(forms.ModelForm):
         )
 
         if commit:
+
             user.save()
 
             UserProfile.objects.update_or_create(
@@ -81,5 +117,17 @@ class UserCreateForm(forms.ModelForm):
                     "role": self.cleaned_data["role"]
                 }
             )
+
+            teacher = self.cleaned_data.get("teacher")
+
+            if (
+                self.cleaned_data["role"] == "Teacher"
+                and teacher
+            ):
+
+                teacher.user = user
+                teacher.save(
+                    update_fields=["user"]
+                )
 
         return user
