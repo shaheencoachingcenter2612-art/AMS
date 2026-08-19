@@ -1,0 +1,234 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Super Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Super Admin Dashboard
+            </h2>
+
+            <p class="text-muted mb-0">
+                Complete Academic Management System
+            </p>
+        </div>
+
+        <span class="badge bg-danger fs-6">
+            {{ role }}
+        </span>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        TOTAL STUDENTS
+                    </small>
+                    <h2 class="fw-bold">
+                        {{ total_students }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        TOTAL TEACHERS
+                    </small>
+                    <h2 class="fw-bold">
+                        {{ total_teachers }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        TODAY PRESENT
+                    </small>
+                    <h2 class="fw-bold text-success">
+                        {{ today_present }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        TODAY ABSENT
+                    </small>
+                    <h2 class="fw-bold text-danger">
+                        {{ today_absent }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        Fee Collection
+                    </h5>
+
+                    <p class="mb-1">
+                        Total: Rs. {{ total_fee_amount }}
+                    </p>
+
+                    <p class="mb-1 text-success">
+                        Paid: Rs. {{ total_fee_paid }}
+                    </p>
+
+                    <p class="mb-0 text-danger">
+                        Remaining: Rs. {{ total_fee_remaining }}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        Salary
+                    </h5>
+
+                    <p class="mb-1">
+                        Total: Rs. {{ total_salary }}
+                    </p>
+
+                    <p class="mb-1 text-success">
+                        Paid: Rs. {{ paid_salary }}
+                    </p>
+
+                    <p class="mb-0 text-danger">
+                        Pending: Rs. {{ pending_salary }}
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+
+                    <h5 class="fw-bold">
+                        Today's Diary
+                    </h5>
+
+                    <h2 class="fw-bold">
+                        {{ today_diary_count }}
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Diary entries recorded today
+                    </p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-dark text-white">
+            Recent Diary Entries
+        </div>
+
+        <div class="card-body">
+
+            {% if recent_diary %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead>
+                            <tr>
+                                <th>Teacher</th>
+                                <th>Class</th>
+                                <th>Section</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for diary in recent_diary %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ diary.teacher }}
+                                    </td>
+
+                                    <td>
+                                        {{ diary.classroom }}
+                                    </td>
+
+                                    <td>
+                                        {{ diary.section }}
+                                    </td>
+
+                                    <td>
+                                        {{ diary.date|date:"d M Y" }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <p class="text-muted mb-0">
+                    No diary entries recorded today.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

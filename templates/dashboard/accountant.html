@@ -1,0 +1,203 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Accountant Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                Accountant Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Fee & Salary Management
+            </p>
+        </div>
+
+        <span class="badge bg-warning text-dark fs-6">
+            {{ role }}
+        </span>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        STUDENTS
+                    </small>
+
+                    <h2 class="fw-bold">
+                        {{ total_students }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        TODAY COLLECTION
+                    </small>
+
+                    <h4 class="fw-bold text-success">
+                        Rs. {{ today_collection }}
+                    </h4>
+
+                    <small>
+                        {{ today_receipts }} receipts
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        TOTAL RECEIVABLE
+                    </small>
+
+                    <h4 class="fw-bold text-danger">
+                        Rs. {{ total_fee_remaining }}
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        PENDING SALARY
+                    </small>
+
+                    <h4 class="fw-bold text-danger">
+                        Rs. {{ pending_salary }}
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white">
+                    Fee Summary
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+                        Total:
+                        <strong>
+                            Rs. {{ total_fee_amount }}
+                        </strong>
+                    </p>
+
+                    <p class="text-success">
+                        Paid:
+                        <strong>
+                            Rs. {{ total_fee_paid }}
+                        </strong>
+                    </p>
+
+                    <p class="text-danger mb-0">
+                        Remaining:
+                        <strong>
+                            Rs. {{ total_fee_remaining }}
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-success text-white">
+                    Salary Summary
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+                        Total:
+                        <strong>
+                            Rs. {{ total_salary }}
+                        </strong>
+                    </p>
+
+                    <p class="text-success">
+                        Paid:
+                        <strong>
+                            Rs. {{ paid_salary }}
+                        </strong>
+                    </p>
+
+                    <p class="text-danger mb-0">
+                        Pending:
+                        <strong>
+                            Rs. {{ pending_salary }}
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

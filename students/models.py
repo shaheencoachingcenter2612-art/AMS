@@ -17,14 +17,18 @@ class Student(models.Model):
         null=True
     )
 
-    first_name = models.CharField(max_length=100)
+    first_name = models.CharField(
+        max_length=100
+    )
 
     last_name = models.CharField(
         max_length=100,
         blank=True
     )
 
-    father_name = models.CharField(max_length=150)
+    father_name = models.CharField(
+        max_length=150
+    )
 
     gender = models.CharField(
         max_length=10,
@@ -33,7 +37,9 @@ class Student(models.Model):
 
     date_of_birth = models.DateField()
 
-    phone = models.CharField(max_length=20)
+    phone = models.CharField(
+        max_length=20
+    )
 
     address = models.TextField()
 
@@ -64,7 +70,21 @@ class Student(models.Model):
         null=True
     )
 
-    admission_date = models.DateField(auto_now_add=True)
+    # Final monthly fee decided at admission
+    monthly_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
+    )
+
+    # Active student means monthly fee is expected
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    admission_date = models.DateField(
+        auto_now_add=True
+    )
 
     def save(self, *args, **kwargs):
 
@@ -72,19 +92,38 @@ class Student(models.Model):
 
             year = datetime.now().year
 
-            last_student = Student.objects.order_by("-id").first()
+            last_student = (
+                Student.objects
+                .filter(
+                    admission_no__startswith=f"SCC-{year}-"
+                )
+                .order_by("-id")
+                .first()
+            )
 
             if last_student and last_student.admission_no:
+
                 try:
-                    last_number = int(last_student.admission_no.split("-")[-1])
+                    last_number = int(
+                        last_student.admission_no.split("-")[-1]
+                    )
+
                 except ValueError:
                     last_number = 0
+
             else:
                 last_number = 0
 
-            self.admission_no = f"SCC-{year}-{last_number + 1:04d}"
+            self.admission_no = (
+                f"SCC-{year}-{last_number + 1:04d}"
+            )
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.admission_no} - {self.first_name} {self.last_name}"
+
+        return (
+            f"{self.admission_no} - "
+            f"{self.first_name} "
+            f"{self.last_name}"
+        )

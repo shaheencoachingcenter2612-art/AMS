@@ -16,6 +16,7 @@ class FeeStructureForm(forms.ModelForm):
         ]
 
         widgets = {
+
             "classroom": forms.Select(
                 attrs={
                     "class": "form-select"
@@ -25,28 +26,36 @@ class FeeStructureForm(forms.ModelForm):
             "monthly_fee": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Monthly Fee"
+                    "placeholder": "Monthly Fee",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
             "admission_fee": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Admission Fee"
+                    "placeholder": "Admission Fee",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
             "registration_fee": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Registration Fee"
+                    "placeholder": "Registration Fee",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
             "exam_fee": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Exam Fee"
+                    "placeholder": "Exam Fee",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
         }
@@ -65,21 +74,18 @@ class FeeForm(forms.ModelForm):
     )
 
     class Meta:
+
         model = Fee
 
         fields = [
             "student",
             "month",
             "year",
-            "monthly_fee",
-            "admission_fee",
-            "exam_fee",
-            "discount",
-            "fine",
-            "total_amount",
             "amount_paid",
             "payment_method",
             "payment_date",
+            "discount",
+            "fine",
             "remarks",
         ]
 
@@ -104,52 +110,30 @@ class FeeForm(forms.ModelForm):
                 }
             ),
 
-            "monthly_fee": forms.NumberInput(
+            "amount_paid": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Monthly Fee"
-                }
-            ),
-
-            "admission_fee": forms.NumberInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Admission Fee"
-                }
-            ),
-
-            "exam_fee": forms.NumberInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Exam Fee"
+                    "placeholder": "Amount Paid",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
             "discount": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Discount"
+                    "placeholder": "Discount",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
             "fine": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "Fine"
-                }
-            ),
-
-            "total_amount": forms.NumberInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Total Amount"
-                }
-            ),
-
-            "amount_paid": forms.NumberInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Amount Paid"
+                    "placeholder": "Fine",
+                    "min": "0",
+                    "step": "0.01"
                 }
             ),
 
@@ -167,3 +151,22 @@ class FeeForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields["student"].queryset = (
+            self.fields["student"]
+            .queryset
+            .select_related(
+                "classroom",
+                "section"
+            )
+            .filter(
+                is_active=True
+            )
+            .order_by(
+                "first_name"
+            )
+        )

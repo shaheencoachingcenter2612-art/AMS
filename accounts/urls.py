@@ -30,7 +30,7 @@ urlpatterns = [
 
     # =====================================================
     # USER MANAGEMENT
-    # SUPER ADMIN
+    # SUPER ADMIN ONLY
     # =====================================================
 
     path(
@@ -51,6 +51,30 @@ urlpatterns = [
         name="user_detail",
     ),
 
+    path(
+        "users/<int:user_id>/edit/",
+        views.edit_user,
+        name="edit_user",
+    ),
+
+    path(
+        "users/<int:user_id>/reset-password/",
+        views.reset_user_password,
+        name="reset_user_password",
+    ),
+
+    path(
+        "users/<int:user_id>/toggle-status/",
+        views.toggle_user_status,
+        name="toggle_user_status",
+    ),
+
+    path(
+        "users/<int:user_id>/delete/",
+        views.delete_user,
+        name="delete_user",
+    ),
+
     # =====================================================
     # MY TEACHER PROFILE
     # =====================================================
@@ -60,4 +84,5 @@ urlpatterns = [
         views.my_teacher_profile,
         name="my_teacher_profile",
     ),
+
 ]

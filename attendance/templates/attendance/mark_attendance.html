@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+
 {% load attendance_tags %}
 
 {% block title %}
@@ -9,6 +10,7 @@ Mark Daily Attendance
 
 <div class="container-fluid mt-4">
 
+    <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
@@ -17,7 +19,7 @@ Mark Daily Attendance
             </h2>
 
             <p class="text-muted mb-0">
-                Select class and section, then mark attendance for all students.
+                Select a class and mark attendance for the entire class.
             </p>
         </div>
 
@@ -31,12 +33,21 @@ Mark Daily Attendance
     </div>
 
 
+    <!-- MESSAGES -->
     {% if messages %}
 
         {% for message in messages %}
 
-            <div class="alert alert-{{ message.tags }}">
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+
                 {{ message }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+                </button>
+
             </div>
 
         {% endfor %}
@@ -44,17 +55,17 @@ Mark Daily Attendance
     {% endif %}
 
 
-    <!-- FILTER -->
-
+    <!-- FILTER CARD -->
     <div class="card shadow-sm mb-4">
 
         <div class="card-header bg-primary text-white">
 
             <h5 class="mb-0">
-                Select Attendance Details
+                Select Class
             </h5>
 
         </div>
+
 
         <div class="card-body">
 
@@ -62,6 +73,7 @@ Mark Daily Attendance
 
                 <div class="row g-3">
 
+                    <!-- SESSION -->
                     <div class="col-md-3">
 
                         <label class="form-label fw-semibold">
@@ -73,6 +85,7 @@ Mark Daily Attendance
                     </div>
 
 
+                    <!-- CLASS -->
                     <div class="col-md-3">
 
                         <label class="form-label fw-semibold">
@@ -84,6 +97,7 @@ Mark Daily Attendance
                     </div>
 
 
+                    <!-- SECTION -->
                     <div class="col-md-3">
 
                         <label class="form-label fw-semibold">
@@ -95,6 +109,7 @@ Mark Daily Attendance
                     </div>
 
 
+                    <!-- DATE -->
                     <div class="col-md-3">
 
                         <label class="form-label fw-semibold">
@@ -112,7 +127,7 @@ Mark Daily Attendance
 
                     <button
                         type="submit"
-                        class="btn btn-primary"
+                        class="btn btn-primary px-4"
                     >
                         Load Students
                     </button>
@@ -126,12 +141,15 @@ Mark Daily Attendance
     </div>
 
 
+    <!-- STUDENT ATTENDANCE -->
     {% if selected_classroom and selected_section %}
 
         <form method="POST">
 
             {% csrf_token %}
 
+
+            <!-- HIDDEN VALUES -->
             <input
                 type="hidden"
                 name="session"
@@ -159,50 +177,90 @@ Mark Daily Attendance
 
             <div class="card shadow-sm">
 
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
 
-                    <div>
+                <!-- CLASS HEADER -->
+                <div class="card-header bg-dark text-white">
 
-                        <strong>
-                            {{ selected_classroom }}
-                        </strong>
+                    <div class="d-flex justify-content-between align-items-center">
 
-                        <span class="mx-2">
-                            |
+                        <div>
+
+                            <strong>
+                                {{ selected_classroom }}
+                            </strong>
+
+                            <span class="mx-2">
+                                |
+                            </span>
+
+                            <strong>
+                                {{ selected_section }}
+                            </strong>
+
+                            <span class="mx-2">
+                                |
+                            </span>
+
+                            {{ selected_date|date:"d M Y" }}
+
+                        </div>
+
+
+                        <span class="badge bg-light text-dark">
+
+                            {{ students|length }}
+                            Students
+
                         </span>
-
-                        <strong>
-                            {{ selected_section }}
-                        </strong>
-
-                        <span class="mx-2">
-                            |
-                        </span>
-
-                        {{ selected_date|date:"d M Y" }}
 
                     </div>
-
-                    <span class="badge bg-light text-dark">
-                        {{ students|length }} Students
-                    </span>
 
                 </div>
 
 
                 <div class="card-body p-0">
 
+
                     {% if students %}
+
+
+                        <!-- QUICK STATUS BUTTONS -->
+                        <div class="p-3 border-bottom bg-light">
+
+                            <strong>
+                                Quick Mark:
+                            </strong>
+
+                            <button
+                                type="button"
+                                class="btn btn-success btn-sm ms-2"
+                                onclick="markAll('Present')"
+                            >
+                                All Present
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn btn-danger btn-sm ms-1"
+                                onclick="markAll('Absent')"
+                            >
+                                All Absent
+                            </button>
+
+                        </div>
+
 
                         <div class="table-responsive">
 
-                            <table class="table table-bordered table-hover mb-0">
+                            <table
+                                class="table table-bordered table-hover align-middle mb-0"
+                            >
 
-                                <thead class="table-light">
+                                <thead class="table-dark">
 
                                     <tr>
 
-                                        <th width="60">
+                                        <th width="55">
                                             #
                                         </th>
 
@@ -215,15 +273,11 @@ Mark Daily Attendance
                                         </th>
 
                                         <th width="180">
-                                            Status
+                                            Attendance
                                         </th>
 
                                         <th>
-                                            Remarks
-                                        </th>
-
-                                        <th width="130">
-                                            WhatsApp
+                                            Leave Reason / Remarks
                                         </th>
 
                                     </tr>
@@ -233,33 +287,52 @@ Mark Daily Attendance
 
                                 <tbody>
 
+
                                     {% for student in students %}
 
                                         {% with record=existing_attendance|get_item:student.id %}
 
                                             <tr>
 
-                                                <td>
+
+                                                <!-- NUMBER -->
+                                                <td class="text-center fw-bold">
+
                                                     {{ forloop.counter }}
+
                                                 </td>
 
+
+                                                <!-- ADMISSION -->
                                                 <td>
+
                                                     {{ student.admission_no }}
-                                                </td>
-
-                                                <td class="fw-semibold">
-
-                                                    {{ student.first_name }}
-                                                    {{ student.last_name }}
 
                                                 </td>
 
 
+                                                <!-- NAME -->
+                                                <td>
+
+                                                    <strong>
+
+                                                        {{ student.first_name }}
+
+                                                        {{ student.last_name }}
+
+                                                    </strong>
+
+                                                </td>
+
+
+                                                <!-- STATUS -->
                                                 <td>
 
                                                     <select
                                                         name="status_{{ student.id }}"
-                                                        class="form-select"
+                                                        class="form-select attendance-status"
+                                                        data-student="{{ student.id }}"
+                                                        onchange="toggleReason(this)"
                                                     >
 
                                                         <option
@@ -271,6 +344,7 @@ Mark Daily Attendance
                                                             Present
                                                         </option>
 
+
                                                         <option
                                                             value="Absent"
                                                             {% if record and record.status == "Absent" %}
@@ -279,6 +353,7 @@ Mark Daily Attendance
                                                         >
                                                             Absent
                                                         </option>
+
 
                                                         <option
                                                             value="Leave"
@@ -294,46 +369,27 @@ Mark Daily Attendance
                                                 </td>
 
 
+                                                <!-- REMARKS / LEAVE REASON -->
                                                 <td>
 
                                                     <input
                                                         type="text"
                                                         name="remarks_{{ student.id }}"
                                                         value="{% if record %}{{ record.remarks }}{% endif %}"
-                                                        class="form-control"
-                                                        placeholder="Optional"
+                                                        class="form-control leave-reason"
+                                                        id="reason_{{ student.id }}"
+                                                        placeholder="Leave reason / remarks"
                                                     >
 
                                                 </td>
 
-
-                                                <td>
-
-                                                    {% if student.phone %}
-
-                                                        <a
-                                                            href="https://wa.me/{{ student.phone|cut:' '|cut:'-'|cut:'+' }}?text=Dear%20Parent%2C%20your%20child%20{{ student.first_name|urlencode }}%20was%20marked%20absent%20today."
-                                                            target="_blank"
-                                                            class="btn btn-sm btn-success"
-                                                        >
-                                                            WhatsApp
-                                                        </a>
-
-                                                    {% else %}
-
-                                                        <span class="text-muted small">
-                                                            No number
-                                                        </span>
-
-                                                    {% endif %}
-
-                                                </td>
 
                                             </tr>
 
                                         {% endwith %}
 
                                     {% endfor %}
+
 
                                 </tbody>
 
@@ -342,18 +398,33 @@ Mark Daily Attendance
                         </div>
 
 
-                        <div class="p-3 border-top">
+                        <!-- SAVE -->
+                        <div class="p-3 border-top d-flex justify-content-between align-items-center">
+
+                            <div class="text-muted">
+
+                                Total Students:
+                                <strong>
+                                    {{ students|length }}
+                                </strong>
+
+                            </div>
+
 
                             <button
                                 type="submit"
-                                class="btn btn-success btn-lg"
+                                class="btn btn-success btn-lg px-5"
                             >
+
                                 Save Attendance
+
                             </button>
 
                         </div>
 
+
                     {% else %}
+
 
                         <div class="p-5 text-center">
 
@@ -362,12 +433,17 @@ Mark Daily Attendance
                             </h5>
 
                             <p class="text-muted mb-0">
-                                Please check the selected session, class and section.
+
+                                Please check the selected
+                                session, class and section.
+
                             </p>
 
                         </div>
 
+
                     {% endif %}
+
 
                 </div>
 
@@ -378,5 +454,79 @@ Mark Daily Attendance
     {% endif %}
 
 </div>
+
+
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
+
+<script>
+
+function toggleReason(selectElement) {
+
+    const studentId = selectElement.dataset.student;
+
+    const reasonBox = document.getElementById(
+        "reason_" + studentId
+    );
+
+    if (!reasonBox) {
+        return;
+    }
+
+    if (selectElement.value === "Leave") {
+
+        reasonBox.placeholder = "Enter leave reason";
+
+        reasonBox.classList.add("border-warning");
+
+    } else {
+
+        reasonBox.placeholder = "Leave reason / remarks";
+
+        reasonBox.classList.remove("border-warning");
+
+    }
+
+}
+
+
+function markAll(status) {
+
+    const selects = document.querySelectorAll(
+        ".attendance-status"
+    );
+
+    selects.forEach(function(select) {
+
+        select.value = status;
+
+        toggleReason(select);
+
+    });
+
+}
+
+
+/* Run when page loads */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const selects = document.querySelectorAll(
+            ".attendance-status"
+        );
+
+        selects.forEach(function(select) {
+
+            toggleReason(select);
+
+        });
+
+    }
+);
+
+</script>
 
 {% endblock %}

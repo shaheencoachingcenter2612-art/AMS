@@ -1,12 +1,8 @@
 from django import forms
 
 from .models import DiaryEntry
-from teachers.models import Teacher
+from academics.models import ClassRoom, Section
 
-
-# =========================================================
-# TEACHER DIARY FORM
-# =========================================================
 
 class DiaryEntryForm(forms.ModelForm):
 
@@ -15,7 +11,6 @@ class DiaryEntryForm(forms.ModelForm):
         model = DiaryEntry
 
         fields = [
-            "teacher",
             "classroom",
             "section",
             "subject",
@@ -27,12 +22,6 @@ class DiaryEntryForm(forms.ModelForm):
         ]
 
         widgets = {
-
-            "teacher": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
-            ),
 
             "classroom": forms.Select(
                 attrs={
@@ -91,19 +80,3 @@ class DiaryEntryForm(forms.ModelForm):
                 }
             ),
         }
-
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-        self.fields["teacher"].queryset = (
-            Teacher.objects
-            .filter(
-                status="Active",
-                user__isnull=False,
-            )
-            .order_by(
-                "first_name",
-                "last_name",
-            )
-        )

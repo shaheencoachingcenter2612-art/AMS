@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+﻿{% extends "base/base.html" %}
 
 {% block title %}
 Delete Student
@@ -11,9 +11,7 @@ Delete Student
     <div class="card shadow border-danger">
 
         <div class="card-header bg-danger text-white">
-            <h3 class="mb-0">
-                Delete Student
-            </h3>
+            <h3 class="mb-0">Delete Student</h3>
         </div>
 
         <div class="card-body">
@@ -39,21 +37,18 @@ Delete Student
                 {{ student.father_name }}
             </p>
 
-            <form method="POST">
+            <form method="POST"
+                  action="{% url 'students:delete_student' student.pk %}">
 
                 {% csrf_token %}
 
-                <button
-                    type="submit"
-                    class="btn btn-danger"
-                >
+                <button type="submit"
+                        class="btn btn-danger">
                     Yes, Delete
                 </button>
 
-                <a
-                    href="{% url 'student_detail' student.pk %}"
-                    class="btn btn-secondary"
-                >
+                <a href="{% url 'students:student_detail' student.pk %}"
+                   class="btn btn-secondary">
                     Cancel
                 </a>
 

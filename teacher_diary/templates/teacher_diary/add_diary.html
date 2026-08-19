@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -21,6 +22,7 @@
     >
 
     <style>
+
         body {
             background: #f4f6f9;
         }
@@ -39,6 +41,7 @@
         textarea.form-control {
             min-height: 100px;
         }
+
     </style>
 
 </head>
@@ -51,9 +54,13 @@
 
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="/">
+        <a class="navbar-brand fw-bold"
+           href="/">
+
             SHAHEEN COACHING CENTER ERP
+
         </a>
+
 
         <a href="{% url 'teacher_diary:diary_list' %}"
            class="btn btn-light">
@@ -82,11 +89,25 @@
 
         </h2>
 
+
         <p class="text-muted">
-            Record the teacher's daily teaching activity.
+
+            Record your daily teaching activity.
+
         </p>
 
     </div>
+
+
+    {% if error %}
+
+        <div class="alert alert-danger">
+
+            {{ error }}
+
+        </div>
+
+    {% endif %}
 
 
     <div class="card page-card shadow-sm">
@@ -95,7 +116,9 @@
         <div class="card-header bg-primary text-white py-3">
 
             <h5 class="mb-0">
+
                 Teaching Information
+
             </h5>
 
         </div>
@@ -123,33 +146,14 @@
                 <div class="row g-4">
 
 
-                    <!-- Teacher -->
+                    <!-- DATE -->
 
                     <div class="col-md-6">
 
                         <label class="form-label fw-semibold">
-                            Teacher *
-                        </label>
 
-                        {{ form.teacher }}
-
-                        {% for error in form.teacher.errors %}
-
-                            <div class="text-danger small">
-                                {{ error }}
-                            </div>
-
-                        {% endfor %}
-
-                    </div>
-
-
-                    <!-- Date -->
-
-                    <div class="col-md-6">
-
-                        <label class="form-label fw-semibold">
                             Date *
+
                         </label>
 
                         {{ form.date }}
@@ -157,7 +161,9 @@
                         {% for error in form.date.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -165,12 +171,14 @@
                     </div>
 
 
-                    <!-- Class -->
+                    <!-- CLASS -->
 
                     <div class="col-md-6">
 
                         <label class="form-label fw-semibold">
+
                             Class *
+
                         </label>
 
                         {{ form.classroom }}
@@ -178,7 +186,9 @@
                         {% for error in form.classroom.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -186,12 +196,14 @@
                     </div>
 
 
-                    <!-- Section -->
+                    <!-- SECTION -->
 
                     <div class="col-md-6">
 
                         <label class="form-label fw-semibold">
+
                             Section *
+
                         </label>
 
                         {{ form.section }}
@@ -199,7 +211,9 @@
                         {% for error in form.section.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -207,12 +221,14 @@
                     </div>
 
 
-                    <!-- Subject -->
+                    <!-- SUBJECT -->
 
                     <div class="col-md-6">
 
                         <label class="form-label fw-semibold">
+
                             Subject *
+
                         </label>
 
                         {{ form.subject }}
@@ -220,7 +236,9 @@
                         {% for error in form.subject.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -228,12 +246,14 @@
                     </div>
 
 
-                    <!-- Topic -->
+                    <!-- TOPIC -->
 
                     <div class="col-md-6">
 
                         <label class="form-label fw-semibold">
+
                             Lesson / Topic *
+
                         </label>
 
                         {{ form.topic }}
@@ -241,7 +261,9 @@
                         {% for error in form.topic.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -249,12 +271,14 @@
                     </div>
 
 
-                    <!-- Description -->
+                    <!-- DESCRIPTION -->
 
                     <div class="col-12">
 
                         <label class="form-label fw-semibold">
+
                             What Was Taught?
+
                         </label>
 
                         {{ form.description }}
@@ -262,7 +286,9 @@
                         {% for error in form.description.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -270,12 +296,14 @@
                     </div>
 
 
-                    <!-- Homework -->
+                    <!-- HOMEWORK -->
 
                     <div class="col-12">
 
                         <label class="form-label fw-semibold">
+
                             Homework
+
                         </label>
 
                         {{ form.homework }}
@@ -283,7 +311,9 @@
                         {% for error in form.homework.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -291,12 +321,14 @@
                     </div>
 
 
-                    <!-- Remarks -->
+                    <!-- REMARKS -->
 
                     <div class="col-12">
 
                         <label class="form-label fw-semibold">
+
                             Remarks
+
                         </label>
 
                         {{ form.remarks }}
@@ -304,7 +336,9 @@
                         {% for error in form.remarks.errors %}
 
                             <div class="text-danger small">
+
                                 {{ error }}
+
                             </div>
 
                         {% endfor %}
@@ -333,9 +367,13 @@
                             class="btn btn-primary px-4">
 
                         {% if edit_mode %}
+
                             Update Diary
+
                         {% else %}
+
                             Save Diary
+
                         {% endif %}
 
                     </button>

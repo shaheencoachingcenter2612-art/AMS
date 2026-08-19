@@ -78,46 +78,28 @@ Results
                     </label>
 
                     <select
-                        name="exam_type"
-                        class="form-select">
+    name="exam_type"
+    class="form-select">
 
-                        <option value="">
-                            All Exam Types
-                        </option>
+    <option value="">All Exam Types</option>
 
-                        <option
-                            value="Monthly Test"
-                            {% if exam_type == "Monthly Test" %}selected{% endif %}>
+    <option value="FAT" {% if exam_type == "FAT" %}selected{% endif %}>
+        FAT - First Assessment Test
+    </option>
 
-                            Monthly Test
+    <option value="SAT" {% if exam_type == "SAT" %}selected{% endif %}>
+        SAT - Second Assessment Test
+    </option>
 
-                        </option>
+    <option value="Test Session" {% if exam_type == "Test Session" %}selected{% endif %}>
+        Test Session
+    </option>
 
-                        <option
-                            value="Mid Term"
-                            {% if exam_type == "Mid Term" %}selected{% endif %}>
+    <option value="Class Test" {% if exam_type == "Class Test" %}selected{% endif %}>
+        Class Test
+    </option>
 
-                            Mid Term
-
-                        </option>
-
-                        <option
-                            value="Final Term"
-                            {% if exam_type == "Final Term" %}selected{% endif %}>
-
-                            Final Term
-
-                        </option>
-
-                        <option
-                            value="Annual"
-                            {% if exam_type == "Annual" %}selected{% endif %}>
-
-                            Annual
-
-                        </option>
-
-                    </select>
+</select>
 
                 </div>
 

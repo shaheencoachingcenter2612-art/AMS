@@ -1,7 +1,10 @@
 from django.urls import path
+
 from . import views
 
+
 app_name = "fee_management"
+
 
 urlpatterns = [
 
@@ -21,6 +24,7 @@ urlpatterns = [
         name="fee_dashboard_page",
     ),
 
+
     # =====================================================
     # FEE REPORT
     # =====================================================
@@ -37,6 +41,7 @@ urlpatterns = [
         name="print_fee_report",
     ),
 
+
     # =====================================================
     # ADD FEE
     # =====================================================
@@ -47,6 +52,7 @@ urlpatterns = [
         name="add_fee",
     ),
 
+
     # =====================================================
     # FEE LIST
     # =====================================================
@@ -56,6 +62,7 @@ urlpatterns = [
         views.fee_list,
         name="fee_list",
     ),
+
 
     # =====================================================
     # FEE STRUCTURE
@@ -85,8 +92,9 @@ urlpatterns = [
         name="delete_fee_structure",
     ),
 
+
     # =====================================================
-    # PRINT FEE RECEIPT
+    # PRINT / DOWNLOAD FEE RECEIPT
     # =====================================================
 
     path(
@@ -94,6 +102,7 @@ urlpatterns = [
         views.print_fee_receipt,
         name="print_fee_receipt",
     ),
+
 
     # =====================================================
     # FEE DETAIL
@@ -105,6 +114,7 @@ urlpatterns = [
         name="fee_detail",
     ),
 
+
     # =====================================================
     # EDIT FEE
     # =====================================================
@@ -115,6 +125,7 @@ urlpatterns = [
         name="edit_fee",
     ),
 
+
     # =====================================================
     # DELETE FEE
     # =====================================================
@@ -124,5 +135,4 @@ urlpatterns = [
         views.delete_fee,
         name="delete_fee",
     ),
-
 ]

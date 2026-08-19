@@ -20,11 +20,187 @@ Add Student
 
             {% csrf_token %}
 
-            {{ form.as_p }}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the following errors:</strong>
+                    {{ form.errors }}
+                </div>
+            {% endif %}
 
-            <button type="submit" class="btn btn-success">
-                Save Student
-            </button>
+            <!-- ============================= -->
+            <!-- PERSONAL INFORMATION -->
+            <!-- ============================= -->
+
+            <h5 class="border-bottom pb-2 mb-3">
+                Personal Information
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        First Name
+                    </label>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Last Name
+                    </label>
+                    {{ form.last_name }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Father's Name
+                    </label>
+                    {{ form.father_name }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">
+                        Gender
+                    </label>
+                    {{ form.gender }}
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">
+                        Date of Birth
+                    </label>
+                    {{ form.date_of_birth }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Phone
+                    </label>
+                    {{ form.phone }}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">
+                        Photo
+                    </label>
+                    {{ form.photo }}
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">
+                        Address
+                    </label>
+                    {{ form.address }}
+                </div>
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- ACADEMIC INFORMATION -->
+            <!-- ============================= -->
+
+            <h5 class="border-bottom pb-2 mb-3 mt-4">
+                Academic Information
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        Session
+                    </label>
+                    {{ form.session }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        Class
+                    </label>
+                    {{ form.classroom }}
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">
+                        Section
+                    </label>
+                    {{ form.section }}
+                </div>
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- FEE INFORMATION -->
+            <!-- ============================= -->
+
+            <h5 class="border-bottom pb-2 mb-3 mt-4">
+                Fee Information
+            </h5>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Final Monthly Fee
+                    </label>
+
+                    {{ form.monthly_fee }}
+
+                    <small class="text-muted">
+                        Enter the final monthly fee agreed with the student
+                        after discount/concession.
+                    </small>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label fw-bold">
+                        Student Status
+                    </label>
+
+                    <div class="form-check mt-2">
+                        {{ form.is_active }}
+
+                        <label class="form-check-label">
+                            Active Student
+                        </label>
+                    </div>
+
+                    <small class="text-muted">
+                        Active students are included in expected monthly revenue.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- SUBMIT -->
+            <!-- ============================= -->
+
+            <div class="mt-4">
+
+                <button
+                    type="submit"
+                    class="btn btn-success px-4">
+
+                    Save Student
+
+                </button>
+
+                <a
+                    href="{% url 'students:student_list' %}"
+                    class="btn btn-secondary px-4">
+
+                    Back
+
+                </a>
+
+            </div>
 
         </form>
 

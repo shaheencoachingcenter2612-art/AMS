@@ -15,7 +15,11 @@ from .forms import (
 )
 
 from students.models import Student
-from academics.models import ClassRoom, Section
+from academics.models import (
+    Session,
+    ClassRoom,
+    Section,
+)
 
 
 # =========================================================
@@ -138,68 +142,165 @@ def attendance_dashboard(request):
 
 
 # =========================================================
-# BULK DAILY ATTENDANCE
+# CLASS-BASED ATTENDANCE
 # =========================================================
+#
+# STEP 1:
+# Show all classes.
+#
+# STEP 2:
+# User opens a class.
+#
+# STEP 3:
+# All students belonging to that class are displayed.
+#
+# STEP 4:
+# Mark Present / Absent / Leave.
+#
+# STEP 5:
+# If Leave is selected, remarks/reason can be entered.
+# =========================================================
+
 
 def mark_attendance(request):
 
-    filter_form = BulkAttendanceFilterForm(
-        request.GET or None
+    classrooms = ClassRoom.objects.all().order_by(
+        "name"
     )
 
-    students = Student.objects.none()
+    today = timezone.localdate()
+
+    class_data = []
+
+    for classroom in classrooms:
+
+        students_count = Student.objects.filter(
+            classroom=classroom
+        ).count()
+
+        today_records = Attendance.objects.filter(
+            classroom=classroom,
+            date=today,
+        )
+
+        present_count = today_records.filter(
+            status="Present"
+        ).count()
+
+        absent_count = today_records.filter(
+            status="Absent"
+        ).count()
+
+        leave_count = today_records.filter(
+            status="Leave"
+        ).count()
+
+        class_data.append({
+            "classroom": classroom,
+            "students_count": students_count,
+            "present": present_count,
+            "absent": absent_count,
+            "leave": leave_count,
+        })
+
+    return render(
+        request,
+        "attendance/class_list.html",
+        {
+            "class_data": class_data,
+            "today": today,
+        },
+    )
+
+
+# =========================================================
+# CLASS ATTENDANCE
+# =========================================================
+
+def class_attendance(request, classroom_id):
+
+    classroom = get_object_or_404(
+        ClassRoom,
+        pk=classroom_id,
+    )
+
+    today = timezone.localdate()
+
+    # -----------------------------------------------------
+    # SESSION
+    # -----------------------------------------------------
+
+    session_id = request.GET.get(
+        "session",
+        ""
+    )
+
+    if not session_id:
+        session_id = request.POST.get(
+            "session",
+            ""
+        )
 
     selected_session = None
-    selected_classroom = None
-    selected_section = None
-    selected_date = timezone.localdate()
 
-    if filter_form.is_valid():
-
-        selected_session = filter_form.cleaned_data["session"]
-        selected_classroom = filter_form.cleaned_data["classroom"]
-        selected_section = filter_form.cleaned_data["section"]
-        selected_date = filter_form.cleaned_data["date"]
-
-        students = Student.objects.filter(
-            session=selected_session,
-            classroom=selected_classroom,
-            section=selected_section,
-        ).order_by(
-            "first_name",
-            "last_name",
+    if session_id:
+        selected_session = get_object_or_404(
+            Session,
+            pk=session_id,
         )
+
+    # -----------------------------------------------------
+    # DATE
+    # -----------------------------------------------------
+
+    date = request.GET.get(
+        "date",
+        ""
+    )
+
+    if not date:
+        date = request.POST.get(
+            "date",
+            ""
+        )
+
+    if date:
+        try:
+            selected_date = timezone.datetime.strptime(
+                date,
+                "%Y-%m-%d",
+            ).date()
+        except ValueError:
+            selected_date = today
+    else:
+        selected_date = today
+
+    # -----------------------------------------------------
+    # STUDENTS
+    # -----------------------------------------------------
+
+    students_query = Student.objects.filter(
+        classroom=classroom
+    )
+
+    if selected_session:
+        students_query = students_query.filter(
+            session=selected_session
+        )
+
+    students = students_query.select_related(
+        "section",
+        "session",
+    ).order_by(
+        "first_name",
+        "last_name",
+    )
+
+    # -----------------------------------------------------
+    # SAVE ATTENDANCE
+    # -----------------------------------------------------
 
     if request.method == "POST":
-
-        session_id = request.POST.get("session")
-        classroom_id = request.POST.get("classroom")
-        section_id = request.POST.get("section")
-        date = request.POST.get("date")
-
-        if not all([
-            session_id,
-            classroom_id,
-            section_id,
-            date,
-        ]):
-            messages.error(
-                request,
-                "Please select session, class, section and date.",
-            )
-
-            return redirect(
-                "attendance:mark_attendance"
-            )
-
-        students = Student.objects.filter(
-            session_id=session_id,
-            classroom_id=classroom_id,
-            section_id=section_id,
-        ).order_by(
-            "first_name",
-            "last_name",
-        )
 
         saved_count = 0
 
@@ -213,15 +314,46 @@ def mark_attendance(request):
             remarks = request.POST.get(
                 f"remarks_{student.id}",
                 "",
-            )
+            ).strip()
+
+            # -------------------------------------------------
+            # IMPORTANT:
+            # If Leave is selected, remarks can contain reason.
+            # -------------------------------------------------
+
+            if status == "Leave" and not remarks:
+
+                remarks = "Leave"
+
+            # -------------------------------------------------
+            # Student's own session
+            # -------------------------------------------------
+
+            student_session = student.session
+
+            if not student_session:
+                continue
+
+            # -------------------------------------------------
+            # Student's own section
+            # -------------------------------------------------
+
+            student_section = student.section
+
+            if not student_section:
+                continue
+
+            # -------------------------------------------------
+            # Create / Update attendance
+            # -------------------------------------------------
 
             Attendance.objects.update_or_create(
                 student=student,
-                session_id=session_id,
-                date=date,
+                session=student_session,
+                date=selected_date,
                 defaults={
-                    "classroom_id": classroom_id,
-                    "section_id": section_id,
+                    "classroom": classroom,
+                    "section": student_section,
                     "status": status,
                     "remarks": remarks,
                 },
@@ -231,48 +363,56 @@ def mark_attendance(request):
 
         messages.success(
             request,
-            f"Attendance saved successfully for {saved_count} students.",
+            f"Attendance saved successfully for "
+            f"{saved_count} students.",
         )
 
         return redirect(
-            f"/attendance/mark/?session={session_id}"
-            f"&classroom={classroom_id}"
-            f"&section={section_id}"
-            f"&date={date}"
+            f"/attendance/class/{classroom.id}/"
+            f"?date={selected_date.strftime('%Y-%m-%d')}"
+            f"&session={session_id}"
         )
+
+    # -----------------------------------------------------
+    # EXISTING ATTENDANCE
+    # -----------------------------------------------------
 
     existing_attendance = {}
 
-    if (
-        selected_session
-        and selected_classroom
-        and selected_section
-        and selected_date
-    ):
+    records = Attendance.objects.filter(
+        classroom=classroom,
+        date=selected_date,
+    )
 
-        records = Attendance.objects.filter(
-            session=selected_session,
-            classroom=selected_classroom,
-            section=selected_section,
-            date=selected_date,
+    if selected_session:
+        records = records.filter(
+            session=selected_session
         )
 
-        existing_attendance = {
-            record.student_id: record
-            for record in records
-        }
+    existing_attendance = {
+        record.student_id: record
+        for record in records
+    }
+
+    # -----------------------------------------------------
+    # AVAILABLE SESSIONS
+    # -----------------------------------------------------
+
+    sessions = Session.objects.all().order_by(
+        "-id"
+    )
 
     return render(
         request,
-        "attendance/mark_attendance.html",
+        "attendance/class_attendance.html",
         {
-            "filter_form": filter_form,
+            "classroom": classroom,
             "students": students,
             "existing_attendance": existing_attendance,
-            "selected_session": selected_session,
-            "selected_classroom": selected_classroom,
-            "selected_section": selected_section,
             "selected_date": selected_date,
+            "selected_session": selected_session,
+            "sessions": sessions,
+            "today": today,
         },
     )
 

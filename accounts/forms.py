@@ -5,13 +5,28 @@ from .models import UserProfile
 from teachers.models import Teacher
 
 
+# =========================================================
+# CREATE USER FORM
+# =========================================================
+
 class UserCreateForm(forms.ModelForm):
 
     password = forms.CharField(
+        label="Password",
         widget=forms.PasswordInput(
             attrs={
                 "class": "form-control",
                 "placeholder": "Password",
+            }
+        )
+    )
+
+    password2 = forms.CharField(
+        label="Confirm Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm Password",
             }
         )
     )
@@ -43,6 +58,7 @@ class UserCreateForm(forms.ModelForm):
     )
 
     class Meta:
+
         model = User
 
         fields = [
@@ -58,6 +74,7 @@ class UserCreateForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Username",
+                    "autocomplete": "username",
                 }
             ),
 
@@ -79,16 +96,59 @@ class UserCreateForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Email Address",
+                    "autocomplete": "email",
                 }
             ),
         }
+
+    def clean_username(self):
+
+        username = self.cleaned_data.get(
+            "username"
+        )
+
+        if username:
+
+            username = username.strip()
+
+        if User.objects.filter(
+            username__iexact=username
+        ).exists():
+
+            raise forms.ValidationError(
+                "A user with this username already exists."
+            )
+
+        return username
 
     def clean(self):
 
         cleaned_data = super().clean()
 
-        role = cleaned_data.get("role")
-        teacher = cleaned_data.get("teacher")
+        password = cleaned_data.get(
+            "password"
+        )
+
+        password2 = cleaned_data.get(
+            "password2"
+        )
+
+        role = cleaned_data.get(
+            "role"
+        )
+
+        teacher = cleaned_data.get(
+            "teacher"
+        )
+
+        if password and password2:
+
+            if password != password2:
+
+                self.add_error(
+                    "password2",
+                    "Passwords do not match."
+                )
 
         if role == "Teacher" and not teacher:
 
@@ -97,15 +157,26 @@ class UserCreateForm(forms.ModelForm):
                 "Please select a teacher for this Teacher account."
             )
 
+        if role != "Teacher" and teacher:
+
+            self.add_error(
+                "teacher",
+                "Teacher profile can only be linked to a Teacher account."
+            )
+
         return cleaned_data
 
     def save(self, commit=True):
 
-        user = super().save(commit=False)
+        user = super().save(
+            commit=False
+        )
 
         user.set_password(
             self.cleaned_data["password"]
         )
+
+        user.is_active = True
 
         if commit:
 
@@ -118,7 +189,9 @@ class UserCreateForm(forms.ModelForm):
                 }
             )
 
-            teacher = self.cleaned_data.get("teacher")
+            teacher = self.cleaned_data.get(
+                "teacher"
+            )
 
             if (
                 self.cleaned_data["role"] == "Teacher"
@@ -126,8 +199,61 @@ class UserCreateForm(forms.ModelForm):
             ):
 
                 teacher.user = user
+
                 teacher.save(
                     update_fields=["user"]
                 )
 
         return user
+
+
+# =========================================================
+# USER PASSWORD RESET FORM
+# =========================================================
+
+class UserPasswordResetForm(forms.Form):
+
+    password = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Enter new password",
+                "autocomplete": "new-password",
+            }
+        )
+    )
+
+    password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Confirm new password",
+                "autocomplete": "new-password",
+            }
+        )
+    )
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get(
+            "password"
+        )
+
+        password2 = cleaned_data.get(
+            "password2"
+        )
+
+        if password and password2:
+
+            if password != password2:
+
+                self.add_error(
+                    "password2",
+                    "Passwords do not match."
+                )
+
+        return cleaned_data

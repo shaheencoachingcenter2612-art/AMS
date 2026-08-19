@@ -1,46 +1,87 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
-Fee Dashboard
+Fee & Finance Dashboard
 {% endblock %}
 
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2>Fee Management Dashboard</h2>
+    <div>
+        <h2 class="fw-bold mb-1">
+            Fee & Finance Dashboard
+        </h2>
+
+        <div class="text-muted">
+            {{ current_month }} {{ current_year }}
+        </div>
+    </div>
 
     <div>
-        <a href="{% url 'fee_management:add_fee' %}"
-           class="btn btn-success">
+
+        <a
+            href="{% url 'fee_management:add_fee' %}"
+            class="btn btn-success"
+        >
             + Collect Fee
         </a>
 
-        <a href="{% url 'fee_management:fee_list' %}"
-           class="btn btn-primary">
-            Fee Records
+        <a
+            href="{% url 'finance:add_expense' %}"
+            class="btn btn-danger"
+        >
+            + Add Expense
         </a>
+
     </div>
 
 </div>
 
 
-<!-- SUMMARY CARDS -->
+<!-- =====================================================
+     CURRENT MONTH FINANCIAL SUMMARY
+===================================================== -->
 
 <div class="row">
 
     <div class="col-md-3 mb-4">
 
-        <div class="card shadow border-primary">
+        <div class="card shadow border-primary h-100">
 
             <div class="card-body">
 
                 <h6 class="text-muted">
-                    Total Fee Records
+                    Expected Revenue
                 </h6>
 
-                <h3>
-                    {{ total_fees }}
+                <h3 class="text-primary fw-bold">
+                    Rs. {{ expected_monthly_revenue|floatformat:2 }}
+                </h3>
+
+                <small class="text-muted">
+                    According to active students
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow border-success h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Collected This Month
+                </h6>
+
+                <h3 class="text-success fw-bold">
+                    Rs. {{ current_collected|floatformat:2 }}
                 </h3>
 
             </div>
@@ -52,16 +93,16 @@ Fee Dashboard
 
     <div class="col-md-3 mb-4">
 
-        <div class="card shadow border-success">
+        <div class="card shadow border-warning h-100">
 
             <div class="card-body">
 
                 <h6 class="text-muted">
-                    Total Amount
+                    Pending This Month
                 </h6>
 
-                <h3>
-                    Rs. {{ total_amount }}
+                <h3 class="text-warning fw-bold">
+                    Rs. {{ current_pending|floatformat:2 }}
                 </h3>
 
             </div>
@@ -73,38 +114,24 @@ Fee Dashboard
 
     <div class="col-md-3 mb-4">
 
-        <div class="card shadow border-success">
+        <div class="card shadow border-danger h-100">
 
             <div class="card-body">
 
                 <h6 class="text-muted">
-                    Amount Collected
+                    Monthly Expenses
                 </h6>
 
-                <h3 class="text-success">
-                    Rs. {{ total_paid }}
+                <h3 class="text-danger fw-bold">
+                    Rs. {{ monthly_expenses|floatformat:2 }}
                 </h3>
 
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="col-md-3 mb-4">
-
-        <div class="card shadow border-danger">
-
-            <div class="card-body">
-
-                <h6 class="text-muted">
-                    Remaining Amount
-                </h6>
-
-                <h3 class="text-danger">
-                    Rs. {{ total_remaining }}
-                </h3>
+                <a
+                    href="{% url 'finance:expense_list' %}"
+                    class="small"
+                >
+                    View Expenses
+                </a>
 
             </div>
 
@@ -115,64 +142,41 @@ Fee Dashboard
 </div>
 
 
-<!-- PAYMENT STATUS -->
+<!-- =====================================================
+     NET REVENUE
+===================================================== -->
 
-<div class="row">
+<div class="card shadow mb-4">
 
-    <div class="col-md-4 mb-4">
+    <div class="card-body">
 
-        <div class="card shadow">
+        <div class="row align-items-center">
 
-            <div class="card-body">
+            <div class="col-md-8">
 
-                <h5>
-                    Paid Records
+                <h5 class="fw-bold">
+                    Net Revenue
                 </h5>
 
-                <h2 class="text-success">
-                    {{ paid_fees }}
-                </h2>
+                <p class="text-muted mb-0">
+                    Collected Revenue − Monthly Expenses
+                </p>
 
             </div>
 
-        </div>
+            <div class="col-md-4 text-md-end">
 
-    </div>
-
-
-    <div class="col-md-4 mb-4">
-
-        <div class="card shadow">
-
-            <div class="card-body">
-
-                <h5>
-                    Pending Records
-                </h5>
-
-                <h2 class="text-danger">
-                    {{ unpaid_fees }}
-                </h2>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="col-md-4 mb-4">
-
-        <div class="card shadow">
-
-            <div class="card-body">
-
-                <h5>
-                    Today's Collection
-                </h5>
-
-                <h2 class="text-primary">
-                    Rs. {{ today_collected }}
+                <h2
+                    class="
+                    {% if net_revenue >= 0 %}
+                        text-success
+                    {% else %}
+                        text-danger
+                    {% endif %}
+                    fw-bold
+                    "
+                >
+                    Rs. {{ net_revenue|floatformat:2 }}
                 </h2>
 
             </div>
@@ -184,18 +188,19 @@ Fee Dashboard
 </div>
 
 
-<!-- MONTHLY SUMMARY -->
+<!-- =====================================================
+     CLASS-WISE REVENUE
+===================================================== -->
 
 <div class="card shadow mb-4">
 
     <div class="card-header bg-dark text-white">
 
         <h5 class="mb-0">
-            Monthly Fee Summary
+            Class-Wise Monthly Revenue
         </h5>
 
     </div>
-
 
     <div class="card-body">
 
@@ -207,39 +212,52 @@ Fee Dashboard
 
                     <tr>
 
-                        <th>
-                            Month
-                        </th>
+                        <th>Class</th>
 
-                        <th>
-                            Number of Records
-                        </th>
+                        <th>Students</th>
 
-                        <th>
-                            Collected Amount
-                        </th>
+                        <th>Monthly Fee</th>
+
+                        <th>Expected</th>
+
+                        <th>Collected</th>
+
+                        <th>Pending</th>
 
                     </tr>
 
                 </thead>
 
-
                 <tbody>
 
-                {% for item in month_summary %}
+                {% for item in class_revenue %}
 
                     <tr>
 
                         <td>
-                            {{ item.month }}
+                            <strong>
+                                {{ item.classroom }}
+                            </strong>
                         </td>
 
                         <td>
-                            {{ item.total }}
+                            {{ item.students }}
                         </td>
 
                         <td>
-                            Rs. {{ item.collected|default:0 }}
+                            Rs. {{ item.monthly_fee|floatformat:2 }}
+                        </td>
+
+                        <td class="text-primary fw-bold">
+                            Rs. {{ item.expected|floatformat:2 }}
+                        </td>
+
+                        <td class="text-success fw-bold">
+                            Rs. {{ item.collected|floatformat:2 }}
+                        </td>
+
+                        <td class="text-danger fw-bold">
+                            Rs. {{ item.pending|floatformat:2 }}
                         </td>
 
                     </tr>
@@ -248,11 +266,11 @@ Fee Dashboard
 
                     <tr>
 
-                        <td colspan="3"
-                            class="text-center">
-
-                            No fee records available.
-
+                        <td
+                            colspan="6"
+                            class="text-center"
+                        >
+                            No active students found.
                         </td>
 
                     </tr>
@@ -270,9 +288,103 @@ Fee Dashboard
 </div>
 
 
-<!-- RECENT PAYMENTS -->
+<!-- =====================================================
+     OVERALL FEE RECORDS
+===================================================== -->
 
-<div class="card shadow">
+<div class="row">
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h6>
+                    Total Fee Records
+                </h6>
+
+                <h3>
+                    {{ total_fees }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h6>
+                    Total Collected
+                </h6>
+
+                <h3 class="text-success">
+                    Rs. {{ total_paid|floatformat:2 }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h6>
+                    Total Pending
+                </h6>
+
+                <h3 class="text-danger">
+                    Rs. {{ total_remaining|floatformat:2 }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-4">
+
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <h6>
+                    Today's Collection
+                </h6>
+
+                <h3 class="text-primary">
+                    Rs. {{ today_collected|floatformat:2 }}
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RECENT PAYMENTS
+===================================================== -->
+
+<div class="card shadow mb-4">
 
     <div class="card-header bg-primary text-white">
 
@@ -281,7 +393,6 @@ Fee Dashboard
         </h5>
 
     </div>
-
 
     <div class="card-body">
 
@@ -293,30 +404,21 @@ Fee Dashboard
 
                     <tr>
 
-                        <th>
-                            Receipt
-                        </th>
+                        <th>Receipt</th>
 
-                        <th>
-                            Student
-                        </th>
+                        <th>Student</th>
 
-                        <th>
-                            Month
-                        </th>
+                        <th>Month</th>
 
-                        <th>
-                            Amount Paid
-                        </th>
+                        <th>Paid</th>
 
-                        <th>
-                            Action
-                        </th>
+                        <th>Remaining</th>
+
+                        <th>Action</th>
 
                     </tr>
 
                 </thead>
-
 
                 <tbody>
 
@@ -329,26 +431,38 @@ Fee Dashboard
                         </td>
 
                         <td>
+
                             {{ fee.student.first_name }}
                             {{ fee.student.last_name }}
+
                         </td>
 
                         <td>
+
                             {{ fee.month }}
                             {{ fee.year }}
+
                         </td>
 
-                        <td>
+                        <td class="text-success fw-bold">
+
                             Rs. {{ fee.amount_paid }}
+
+                        </td>
+
+                        <td class="text-danger fw-bold">
+
+                            Rs. {{ fee.remaining_amount }}
+
                         </td>
 
                         <td>
 
-                            <a href="{% url 'fee_management:fee_detail' fee.pk %}"
-                               class="btn btn-sm btn-info">
-
+                            <a
+                                href="{% url 'fee_management:fee_detail' fee.pk %}"
+                                class="btn btn-sm btn-info"
+                            >
                                 View
-
                             </a>
 
                         </td>
@@ -359,11 +473,11 @@ Fee Dashboard
 
                     <tr>
 
-                        <td colspan="5"
-                            class="text-center">
-
+                        <td
+                            colspan="6"
+                            class="text-center"
+                        >
                             No recent payments.
-
                         </td>
 
                     </tr>

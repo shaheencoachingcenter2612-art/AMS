@@ -1,0 +1,187 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Vice Principal Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                Vice Principal Dashboard
+            </h2>
+
+            <p class="text-muted">
+                Academic & Administrative Overview
+            </p>
+        </div>
+
+        <span class="badge bg-primary fs-6">
+            {{ role }}
+        </span>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        STUDENTS
+                    </small>
+                    <h2 class="fw-bold">
+                        {{ total_students }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        TEACHERS
+                    </small>
+                    <h2 class="fw-bold">
+                        {{ total_teachers }}
+                    </h2>
+                    <small>
+                        {{ active_teachers }} Active
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        PRESENT TODAY
+                    </small>
+                    <h2 class="fw-bold text-success">
+                        {{ today_present }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <small class="text-muted">
+                        ABSENT TODAY
+                    </small>
+                    <h2 class="fw-bold text-danger">
+                        {{ today_absent }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row g-4 mt-1">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white">
+                    Today's Teaching Diary
+                </div>
+
+                <div class="card-body">
+
+                    <h3>
+                        {{ today_diary_count }}
+                    </h3>
+
+                    <p class="text-muted">
+                        Diary entries submitted today.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-success text-white">
+                    Classes & Sections
+                </div>
+
+                <div class="card-body">
+
+                    <h5>
+                        Classes:
+                        {{ total_classes }}
+                    </h5>
+
+                    <h5>
+                        Sections:
+                        {{ total_sections }}
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0 mt-4">
+
+        <div class="card-header bg-dark text-white">
+            Recent Teaching Diary
+        </div>
+
+        <div class="card-body">
+
+            {% for diary in recent_diary %}
+
+                <div class="border-bottom py-2">
+
+                    <strong>
+                        {{ diary.teacher }}
+                    </strong>
+
+                    —
+                    {{ diary.classroom }}
+
+                    —
+                    {{ diary.section }}
+
+                </div>
+
+            {% empty %}
+
+                <p class="text-muted mb-0">
+                    No diary entries available.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

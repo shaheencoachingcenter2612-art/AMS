@@ -9,30 +9,46 @@ app_name = "attendance"
 urlpatterns = [
 
     # =====================================================
-    # ATTENDANCE DASHBOARD
+    # ATTENDANCE HOME
     # =====================================================
 
+    # /attendance/
+    # Opens the class list
     path(
         "",
-        views.attendance_dashboard,
+        views.mark_attendance,
         name="attendance_home",
     ),
 
+    # Old attendance dashboard
+    # /attendance/dashboard/
     path(
         "dashboard/",
         views.attendance_dashboard,
         name="attendance_dashboard",
     ),
 
+
     # =====================================================
-    # DAILY BULK ATTENDANCE
+    # CLASS-BASED DAILY ATTENDANCE
     # =====================================================
 
+    # Shows all classes
+    # /attendance/mark/
     path(
         "mark/",
         views.mark_attendance,
         name="mark_attendance",
     ),
+
+    # Opens selected class
+    # /attendance/class/4/
+    path(
+        "class/<int:classroom_id>/",
+        views.class_attendance,
+        name="class_attendance",
+    ),
+
 
     # =====================================================
     # ATTENDANCE LIST
@@ -43,6 +59,7 @@ urlpatterns = [
         views.attendance_list,
         name="attendance_list",
     ),
+
 
     # =====================================================
     # SINGLE ATTENDANCE
@@ -71,6 +88,7 @@ urlpatterns = [
         views.delete_attendance,
         name="delete_attendance",
     ),
+
 
     # =====================================================
     # REPORTS
